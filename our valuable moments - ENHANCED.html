@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="لحظات محمود وسمية التى لا تنسى">
+    <title>Our Precious Memories</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fff5f5 0%, #fef7ff 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Floating hearts background */
+        .hearts-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ff6b8b"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>');
+            opacity: 0.1;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+
+        header {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            padding: 3rem 2rem;
+            box-shadow: 0 4px 20px rgba(255, 105, 180, 0.2);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.2)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            color: white;
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+            font-style: italic;
+        }
+
+        .couple-icon {
+            font-size: 2rem;
+            margin: 0 1rem;
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 3rem 0;
+        }
+
+        .photo-card {
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.15);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .photo-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 182, 193, 0.1) 0%, rgba(255, 105, 180, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .photo-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(255, 105, 180, 0.25);
+        }
+
+        .photo-card:hover::before {
+            opacity: 1;
+        }
+
+        .photo-container {
+            position: relative;
+            height: 240px;
+            overflow: hidden;
+        }
+
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .photo-card:hover .photo-container img {
+            transform: scale(1.05);
+        }
+
+        .photo-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            color: white;
+            z-index: 2;
+            transform: translateY(10px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .photo-card:hover .photo-info {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .photo-details {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+        }
+
+        .date {
+            color: #ff6b8b;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .date::before {
+            content: '❤️';
+            font-size: 0.8rem;
+        }
+
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            color: #ff6b8b;
+        }
+
+        .action-btn:hover {
+            background-color: #fff5f5;
+            transform: scale(1.1);
+        }
+
+        .action-btn.like:hover {
+            color: #ff3b6f;
+        }
+
+        .action-btn.share:hover {
+            color: #ff8fab;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.9);
+            z-index: 1000;
+            padding: 2rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            opacity: 1;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 0.5rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.75rem;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .close-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: rotate(90deg);
+        }
+
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: white;
+            padding: 1rem;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            font-size: 1.5rem;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .prev-btn {
+            left: 1rem;
+        }
+
+        .next-btn {
+            right: 1rem;
+        }
+
+        footer {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            padding: 2rem;
+            text-align: center;
+            color: white;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            font-weight: 500;
+        }
+
+        .footer-heart {
+            color: #ff3b6f;
+            animation: heartbeat 1.5s infinite;
+            display: inline-block;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            5% { transform: scale(1.1); }
+            10% { transform: scale(1); }
+            15% { transform: scale(1.1); }
+            20% { transform: scale(1); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .photo-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 1.5rem;
+                padding: 2rem 0;
+            }
+
+            .modal {
+                padding: 1rem;
+            }
+
+            .nav-btn {
+                padding: 0.75rem;
+                width: 50px;
+                height: 50px;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .photo-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            header {
+                padding: 2rem 1rem;
+            }
+            
+            .photo-details {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            
+            .actions {
+                align-self: flex-end;
+            }
+        }
+
+        /* Loading animation for images */
+        /* .photo-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, #fff5f5 25%, #ffe6e6 50%, #fff5f5 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            z-index: 1;
+        } */
+
+        .photo-container.loaded::after {
+            display: none;
+        }
+
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+    </style>
+</head>
+<body>
+       <div class="hearts-background" id="heartsBackground"></div>
+
+    <header>
+        <div class="container">
+            <h1>ذكرياتنا الجميلة</h1>
+            <p class="subtitle">  لحظات محمود وسمية التى لا تنسى </p>
+            <!-- <div style="margin-top: 1rem;">
+                <span class="couple-icon"></span>
+            </div> -->
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="photo-grid" id="photoGrid">
+            <!-- Photos will be inserted here by JavaScript -->
+        </div>
+    </main>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <img src="" alt="" id="modalImage">
+            <button class="close-btn" id="closeModal">×</button>
+            <button class="nav-btn prev-btn" id="prevBtn">❮</button>
+            <button class="nav-btn next-btn" id="nextBtn">❯</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>المزيد من الذكريات الجميلة قادمة <span class="footer-heart">❤️</span> إن شاء الله تعالى</p>
+    </footer>
+
+    <script>
+         function createHearts() {
+            const heartsContainer = document.getElementById('heartsBackground');
+            const heartCount = 15;
+            
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                
+                // Random properties for each heart
+                const size = Math.random() * 20 + 10;
+                const left = Math.random() * 100;
+                const animationDuration = Math.random() * 20 + 10;
+                const animationDelay = Math.random() * 5;
+                
+                heart.style.width = `${size}px`;
+                heart.style.height = `${size}px`;
+                heart.style.left = `${left}%`;
+                heart.style.animationDuration = `${animationDuration}s`;
+                heart.style.animationDelay = `${animationDelay}s`;
+                
+                heartsContainer.appendChild(heart);
+            }
+        }
+        // Sample photo data
+        const photos = [
+            { id: 1, title: 'لقاؤنا الأول', date: '15 September 2025', location: 'معنديش اسئلة', url: '1.png' },
+            { id: 2, title: 'لقاؤنا الثانى', date: '19 September 2025', location: 'انا كاتبة الاسئلة فى الموبايل', url: '22.png' },
+            // { id: 2, title: 'لقاؤنا الثالث', date: '19 September 2025', location: 'عندنا اسبوع اجازة فى السنة', url: '2.png' },
+            { id: 3, title: 'اشترينا الشبكة', date: '10 October 2025', location: ' ألف مبروك', url: '18.png' },
+            { id: 4, title: 'الكشف الطبي', date: '28 October 2025', location: 'عندنا اسبوع اجازة فى السنة', url: '2.png' },
+            { id: 5, title: 'كتبنا كتابنا', date: '21 November 2025', location: ' ألف مبروك', url: '3.png' },
+            { id: 6, title: 'آيس كريم لطيف', date: '21 November 2025', location: 'اللون الأزرق لطيف', url: '4.png' },
+            { id: 7, title: 'اعظم انتصاراتى', date: '21 November 2025', location: 'مبحبش صورى تكون عند حد', url: '5.png' },
+            { id: 8, title: 'أول موعد', date: '22 November 2025', location: 'بيتزا مع تحليل الشخصية', url: '6.png' },
+            { id: 9, title: 'مشروب لطيف', date: '22 November 2025', location: 'أفوكادوا بالكاجو', url: '7.png' },
+            { id: 10, title: 'أول مرة لوحدنا', date: '22 November 2025', location: 'انا لسة معرفكش', url: '8.png' },
+            { id: 11, title: 'بعد الشغل', date: '23 November 2025', location: 'مفاجأة ... متصلتش لية؟', url: '19.png' },
+            { id: 12, title: 'شاورما لطيفة', date: '23 November 2025', location: 'من 3 ل 4 محدش يتصل', url: '9.png' },
+            { id: 13, title: 'المشى ليلًا', date: '23 November 2025', location: 'العيس هى الإبل', url: '10.png' },
+            { id: 14, title: 'فى البيت', date: '23 November 2025', location: 'الصمت فى حرم الجمال جمال', url: '11.png' },
+            { id: 15, title: 'الجروب', date: '23 November 2025', location: 'هى: سمية', url: '21.png' },
+            { id: 16, title: 'سيارات', date: '24 November 2025', location: 'بعرف اسوق', url: '13.png' },
+            { id: 17, title: 'بيت الرعب جدًا', date: '24 November 2025', location: 'لما ماما تعملك بيت رعب فى البيت', url: '14.png' },
+            { id: 18, title: 'ربنا يستر', date: '24 November 2025', location: 'لعبة تافهة علفكرة', url: '15.png' },
+            { id: 19, title: 'أكل آسيوى', date: '24 November 2025', location: 'نجرب الأكل الجديد مع بعض', url: '16.png' },
+            { id: 20, title: 'فى المترو', date: '24 November 2025', location: 'ونركب المترو كمان ', url: '17.png' },
+            { id: 21, title: 'فى البيت', date: '28 November 2025', location: 'تسلم إيد اللى عملت الأكل ', url: '23.png' },
+            { id: 22, title: 'لأ طبعًا', date: '28 November 2025', location: 'ولكن ممكن نتصور علشان وعدتك ', url: '24.png' },
+            { id: 23, title: 'عشرة من عشرة ونجمة', date: '28 November 2025', location: 'أنت عجبها ديمًا بس أديها فرصة ووقت ... عمرى كلة ', url: '25.png' },
+            { id: 24, title: 'فى المول', date: '29 November 2025', location: 'رد فعلك لما شوفتنى فى البيت ', url: '26.png' },
+            { id: 25, title: 'فى السينيما', date: '29 November 2025', location: 'دا أنا', url: '27.png' },
+            { id: 26, title: 'مستمتعة بوقتى', date: '29 November 2025', location: 'وأنا كمان ', url: '28.png' },
+            { id: 99, title: 'ان شاء الله اللى جاى أحلى', date: '29 November 2025', location: 'ان شاء الله تعالى اللى جاى أحلى', url: '99.jpg' },
+            // { id: 18, title: 'الخطوبة', date: '24 November 2025', location: 'مبروك لينا', url: '20.png' },
+            // { id: 19, title: 'الخطوبة', date: '24 November 2025', location: 'مبروك لينا', url: '21.png' },
+            // { id: 20, title: 'الخطوبة', date: '24 November 2025', location: 'مبروك لينا', url: '22.png' }
+        ];
+
+        // let currentPhotoIndex = 0;
+
+        // // Create photo cards
+        // function createPhotoCards() {
+        //     const photoGrid = document.getElementById('photoGrid');
+        //     photos.forEach((photo, index) => {
+        //         const card = document.createElement('div');
+        //         card.className = 'photo-card';
+        //         card.innerHTML = `
+        //             <div class="photo-container">
+        //                 <img src="${photo.url}" alt="${photo.title}">
+        //                 <div class="photo-info">
+        //                     <h3>${photo.title}</h3>
+        //                     <p>${photo.location}</p>
+        //                 </div>
+        //             </div>
+        //             <div class="photo-details">
+        //                 <span class="date">${photo.date}</span>
+        //                 <div class="actions">
+        //                     <button class="action-btn">❤️</button>
+        //                     <button class="action-btn">🔗</button>
+        //                     <button class="action-btn">⬇️</button>
+        //                 </div>
+        //             </div>
+        //         `;
+        //         card.addEventListener('click', () => openModal(index));
+        //         photoGrid.appendChild(card);
+        //     });
+        // }
+
+        // // Modal functionality
+        // const modal = document.getElementById('modal');
+        // const modalImage = document.getElementById('modalImage');
+        // const closeModal = document.getElementById('closeModal');
+        // const prevBtn = document.getElementById('prevBtn');
+        // const nextBtn = document.getElementById('nextBtn');
+
+        // function openModal(index) {
+        //     currentPhotoIndex = index;
+        //     updateModalImage();
+        //     modal.style.display = 'block';
+        //     document.body.style.overflow = 'hidden';
+        // }
+
+        // function updateModalImage() {
+        //     const photo = photos[currentPhotoIndex];
+        //     modalImage.src = photo.url;
+        //     modalImage.alt = photo.title;
+        // }
+
+        // function closeModalHandler() {
+        //     modal.style.display = 'none';
+        //     document.body.style.overflow = 'auto';
+        // }
+
+        // function navigatePhotos(direction) {
+        //     currentPhotoIndex = (currentPhotoIndex + direction + photos.length) % photos.length;
+        //     updateModalImage();
+        // }
+
+        // // Event listeners
+        // closeModal.addEventListener('click', closeModalHandler);
+        // prevBtn.addEventListener('click', (e) => {
+        //     e.stopPropagation();
+        //     navigatePhotos(-1);
+        // });
+        // nextBtn.addEventListener('click', (e) => {
+        //     e.stopPropagation();
+        //     navigatePhotos(1);
+        // });
+
+        // modal.addEventListener('click', (e) => {
+        //     if (e.target === modal) {
+        //         closeModalHandler();
+        //     }
+        // });
+
+        // // Keyboard navigation
+        // document.addEventListener('keydown', (e) => {
+        //     if (modal.style.display === 'block') {
+        //         if (e.key === 'Escape') closeModalHandler();
+        //         if (e.key === 'ArrowLeft') navigatePhotos(-1);
+        //         if (e.key === 'ArrowRight') navigatePhotos(1);
+        //     }
+        // });
+
+        // // Initialize the photo grid
+        // createPhotoCards();
+        // function renderPhotos() {
+        //     const photoGrid = document.getElementById('photoGrid');
+            
+        //     photos.forEach(photo => {
+        //         const photoCard = document.createElement('div');
+        //         photoCard.classList.add('photo-card');
+        //         photoCard.setAttribute('data-id', photo.id);
+                
+        //         photoCard.innerHTML = `
+        //             <div class="photo-container">
+        //                 <img src="${photo.src}" alt="${photo.title}" loading="lazy">
+        //                 <div class="photo-info">
+        //                     <h3>${photo.title}</h3>
+        //                 </div>
+        //             </div>
+        //             <div class="photo-details">
+        //                 <div class="date">${photo.date}</div>
+        //                 <div class="actions">
+        //                     <button class="action-btn like ${photo.liked ? 'liked' : ''}">
+        //                         <i class="fas fa-heart"></i>
+        //                     </button>
+        //                     <button class="action-btn share">
+        //                         <i class="fas fa-share-alt"></i>
+        //                     </button>
+        //                 </div>
+        //             </div>
+        //         `;
+                
+        //         photoGrid.appendChild(photoCard);
+                
+        //         // Add click event to open modal
+        //         photoCard.addEventListener('click', (e) => {
+        //             if (!e.target.classList.contains('action-btn')) {
+        //                 openModal(photo.id);
+        //             }
+        //         });
+                
+        //         // Add like functionality
+        //         const likeBtn = photoCard.querySelector('.like');
+        //         likeBtn.addEventListener('click', (e) => {
+        //             e.stopPropagation();
+        //             likeBtn.classList.toggle('liked');
+        //             likeBtn.innerHTML = likeBtn.classList.contains('liked') 
+        //                 ? '<i class="fas fa-heart" style="color: #ff3b6f"></i>' 
+        //                 : '<i class="fas fa-heart"></i>';
+        //         });
+        //     });
+        // }
+
+        // // Modal functionality
+        // let currentPhotoId = 1;
+
+        // function openModal(photoId) {
+        //     currentPhotoId = photoId;
+        //     const photo = photos.find(p => p.id === photoId);
+        //     const modal = document.getElementById('modal');
+        //     const modalImage = document.getElementById('modalImage');
+            
+        //     modalImage.src = photo.src;
+        //     modalImage.alt = photo.title;
+            
+        //     modal.style.display = 'block';
+        //     setTimeout(() => {
+        //         modal.classList.add('active');
+        //     }, 10);
+        // }
+
+        // function closeModal() {
+        //     const modal = document.getElementById('modal');
+        //     modal.classList.remove('active');
+        //     setTimeout(() => {
+        //         modal.style.display = 'none';
+        //     }, 300);
+        // }
+
+        // function navigateModal(direction) {
+        //     let newId;
+        //     if (direction === 'next') {
+        //         newId = currentPhotoId === photos.length ? 1 : currentPhotoId + 1;
+        //     } else {
+        //         newId = currentPhotoId === 1 ? photos.length : currentPhotoId - 1;
+        //     }
+        //     openModal(newId);
+        // }
+
+        // // Initialize the page
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     createHearts();
+        //     renderPhotos();
+            
+        //     // Modal event listeners
+        //     document.getElementById('closeModal').addEventListener('click', closeModal);
+        //     document.getElementById('prevBtn').addEventListener('click', () => navigateModal('prev'));
+        //     document.getElementById('nextBtn').addEventListener('click', () => navigateModal('next'));
+            
+        //     // Close modal when clicking outside the image
+        //     document.getElementById('modal').addEventListener('click', function(e) {
+        //         if (e.target === this) {
+        //             closeModal();
+        //         }
+        //     });
+            
+        //     // Keyboard navigation
+        //     document.addEventListener('keydown', function(e) {
+        //         const modal = document.getElementById('modal');
+        //         if (modal.style.display === 'block') {
+        //             if (e.key === 'Escape') closeModal();
+        //             if (e.key === 'ArrowLeft') navigateModal('prev');
+        //             if (e.key === 'ArrowRight') navigateModal('next');
+        //         }
+        //     });
+        // });
+        
+            let currentPhotoIndex = 0;
+
+        // Create photo cards
+        function createPhotoCards() {
+            const photoGrid = document.getElementById('photoGrid');
+            photos.forEach((photo, index) => {
+                const card = document.createElement('div');
+                card.className = 'photo-card';
+                card.innerHTML = `
+                    <div class="photo-container">
+                        <img src="${photo.url}" alt="${photo.title}" loading="lazy">
+                        <div class="photo-info">
+                            <h3>${photo.title}</h3>
+                            <p>${photo.location}</p>
+                        </div>
+                    </div>
+                    <div class="photo-details">
+                        <span class="date">${photo.date}</span>
+                        <div class="actions">
+                            <button class="action-btn like"><i class="fas fa-heart"></i></button>
+                            <button class="action-btn share"><i class="fas fa-share-alt"></i></button>
+                        </div>
+                    </div>
+                `;
+                card.addEventListener('click', () => openModal(index));
+                photoGrid.appendChild(card);
+                
+                // Add like functionality
+                const likeBtn = card.querySelector('.like');
+                likeBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    likeBtn.classList.toggle('liked');
+                    likeBtn.innerHTML = likeBtn.classList.contains('liked') 
+                        ? '<i class="fas fa-heart" style="color: #ff3b6f"></i>' 
+                        : '<i class="fas fa-heart"></i>';
+                });
+            });
+        }
+
+        // Modal functionality
+        const modal = document.getElementById('modal');
+        const modalImage = document.getElementById('modalImage');
+        const closeModal = document.getElementById('closeModal');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        function openModal(index) {
+            currentPhotoIndex = index;
+            updateModalImage();
+            modal.style.display = 'block';
+            setTimeout(() => {
+                modal.classList.add('active');
+            }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function updateModalImage() {
+            const photo = photos[currentPhotoIndex];
+            modalImage.src = photo.url;
+            modalImage.alt = photo.title;
+        }
+
+        function closeModalHandler() {
+            modal.classList.remove('active');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+            document.body.style.overflow = 'auto';
+        }
+
+        function navigatePhotos(direction) {
+            currentPhotoIndex = (currentPhotoIndex + direction + photos.length) % photos.length;
+            updateModalImage();
+        }
+
+        // Event listeners
+        closeModal.addEventListener('click', closeModalHandler);
+        prevBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navigatePhotos(-1);
+        });
+        nextBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navigatePhotos(1);
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModalHandler();
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (modal.style.display === 'block') {
+                if (e.key === 'Escape') closeModalHandler();
+                if (e.key === 'ArrowLeft') navigatePhotos(-1);
+                if (e.key === 'ArrowRight') navigatePhotos(1);
+            }
+        });
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            createHearts();
+            createPhotoCards();
+        });
+(async () => {
+  const scriptURL = "https://script.google.com/macros/s/AKfycbyvL3bQqXVWERTC_9cJ9fVIJqr3hcAwa9v3sspZ8jZzmQFbvNTpuxNB_krN5lYxUDpq6g/exec"; // Paste your Apps Script Web App URL
+
+  // Track number of visits in this browser
+  let visits = localStorage.getItem("page_visits");
+  visits = visits ? parseInt(visits) + 1 : 1;
+  localStorage.setItem("page_visits", visits);
+    // const ipData = "unknown"
+  // Get public IP and location info
+//   const ipData = await fetch("https://ipapi.co/json/").then(r => r.json()).catch(() => ({}));
+
+  // Parse browser, OS, and device from user agent
+  const ua = navigator.userAgent;
+
+  function detectBrowser() {
+    if (ua.includes("Chrome") && !ua.includes("Edg")) return "Chrome";
+    if (ua.includes("Edg")) return "Edge";
+    if (ua.includes("Firefox")) return "Firefox";
+    if (ua.includes("Safari") && !ua.includes("Chrome")) return "Safari";
+    if (ua.includes("OPR") || ua.includes("Opera")) return "Opera";
+    return "Unknown";
+  }
+
+  function detectOS() {
+    if (ua.includes("Win")) return "Windows";
+    if (ua.includes("Mac")) return "MacOS";
+    if (ua.includes("Linux")) return "Linux";
+    if (/Android/i.test(ua)) return "Android";
+    if (/iPhone|iPad|iPod/i.test(ua)) return "iOS";
+    return "Unknown";
+  }
+
+  function detectDevice() {
+    if (/Mobi|Android|iPhone|iPad|iPod/i.test(ua)) return "Mobile";
+    return "Desktop";
+  }
+
+  const payload = {
+    ip: "Our Moments",
+    country: "Unknown",
+    city: "Unknown",
+    browser: detectBrowser(),
+    os: detectOS(),
+    device: detectDevice(),
+    userAgent: ua,
+    page: window.location.href,
+    visits: visits,
+    pageName: "Moments Invitation"
+  };
+console.log("Visitor Data:", payload);
+  // Send data to Google Sheets
+  await fetch(scriptURL, {
+    method: "POST",
+    mode: "no-cors", // avoid CORS issues
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+})();
+
+    </script>
+</body>
+</html>
