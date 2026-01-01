@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="لحظات محمود وسمية التى لا تنسى">
+    <title>Our Precious Memories</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #fad0c4  ;
+        }
+
+        header {
+            background-color: #ff9a9e;
+            padding: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        h1 {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: rgb(242, 231, 242);
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem 0;
+        }
+
+        .photo-card {
+            background: white;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(235, 164, 210, 0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .photo-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .photo-container {
+            position: relative;
+            height: 200px;
+        }
+
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            color: white;
+        }
+
+        .photo-details {
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .date {
+            color: #ff6b8b;
+            font-size: 0.875rem;
+        }
+
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .action-btn:hover {
+            background-color: #f3f4f6;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.9);
+            z-index: 1000;
+            padding: 2rem;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 0.5rem;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 1rem;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .prev-btn {
+            left: 1rem;
+        }
+
+        .next-btn {
+            right: 1rem;
+        }
+
+        footer {
+            background-color: #ff9a9e;
+            padding: 1.5rem;
+            text-align: center;
+            color: white;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        @media (max-width: 768px) {
+            .photo-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+
+            .modal {
+                padding: 1rem;
+            }
+
+            .nav-btn {
+                padding: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts-background" id="heartsBackground"></div>
+    <header>
+        <div class="container">
+            <h1>Our Precious Memories</h1>
+            <p class="subtitle">Capturing Our Valuable Moments</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="photo-grid" id="photoGrid">
+            <!-- Photos will be inserted here by JavaScript -->
+        </div>
+    </main>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <img src="" alt="" id="modalImage">
+            <button class="close-btn" id="closeModal">×</button>
+            <button class="nav-btn prev-btn" id="prevBtn">❮</button>
+            <button class="nav-btn next-btn" id="nextBtn">❯</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>More Memories are Comming Soon ان شاء الله تعالى .</p>
+    </footer>
+
+    <script>
+        // Sample photo data
+        const photos = [
+            { id: 1, title: 'لقاؤنا الأول', date: '15 September 2025', location: 'معنديش اسئلة', url: '1.png' },
+            { id: 2, title: 'لقاؤنا الثانى', date: '19 September 2025', location: 'انا كاتبة الاسئلة فى الموبايل', url: '22.png' },
+            // { id: 2, title: 'لقاؤنا الثالث', date: '19 September 2025', location: 'عندنا اسبوع اجازة فى السنة', url: '2.png' },
+            { id: 3, title: 'اشترينا الشبكة', date: '10 October 2025', location: ' ألف مبروك', url: '18.png' },
+            { id: 4, title: 'الكشف الطبي', date: '28 October 2025', location: 'عندنا اسبوع اجازة فى السنة', url: '2.png' },
+            { id: 5, title: 'كتبنا كتابنا', date: '21 November 2025', location: ' ألف مبروك', url: '3.png' },
+            { id: 6, title: 'آيس كريم لطيف', date: '21 November 2025', location: 'اللون الأزرق لطيف', url: '4.png' },
+            { id: 7, title: 'اعظم انتصاراتى', date: '21 November 2025', location: 'مبحبش صورى تكون عند حد', url: '5.png' },
+            { id: 8, title: 'أول موعد', date: '22 November 2025', location: 'بيتزا مع تحليل الشخصية', url: '6.png' },
+            { id: 9, title: 'مشروب لطيف', date: '22 November 2025', location: 'أفوكادوا بالكاجو', url: '7.png' },
+            { id: 10, title: 'أول مرة لوحدنا', date: '22 November 2025', location: 'انا لسة معرفكش', url: '8.png' },
+            { id: 11, title: 'بعد الشغل', date: '23 November 2025', location: 'مفاجأة ... متصلتش لية؟', url: '19.png' },
+            { id: 12, title: 'شاورما لطيفة', date: '23 November 2025', location: 'من 3 ل 4 محدش يتصل', url: '9.png' },
+            { id: 13, title: 'المشى ليلًا', date: '23 November 2025', location: 'العيس هى الإبل', url: '10.png' },
+            { id: 14, title: 'فى البيت', date: '23 November 2025', location: 'الصمت فى حرم الجمال جمال', url: '11.png' },
+            { id: 15, title: 'الجروب', date: '23 November 2025', location: 'هى: سمية', url: '21.png' },
+            { id: 16, title: 'سيارات', date: '24 November 2025', location: 'بعرف اسوق', url: '13.png' },
+            { id: 17, title: 'بيت الرعب جدًا', date: '24 November 2025', location: 'لما ماما تعملك بيت رعب فى البيت', url: '14.png' },
+            { id: 18, title: 'ربنا يستر', date: '24 November 2025', location: 'لعبة تافهة علفكرة', url: '15.png' },
+            { id: 19, title: 'أكل آسيوى', date: '24 November 2025', location: 'نجرب الأكل الجديد مع بعض', url: '16.png' },
+            { id: 20, title: 'فى المترو', date: '24 November 2025', location: 'ونركب المترو كمان ', url: '17.png' },
+            { id: 21, title: 'فى البيت', date: '28 November 2025', location: 'تسلم إيد اللى عملت الأكل ', url: '23.png' },
+            { id: 22, title: 'لأ طبعًا', date: '28 November 2025', location: 'ولكن ممكن نتصور علشان وعدتك ', url: '24.png' },
+            { id: 23, title: 'عشرة من عشرة ونجمة', date: '28 November 2025', location: 'أنت عجبها ديمًا بس أديها فرصة ووقت ... عمرى كلة ', url: '25.png' },
+            { id: 24, title: 'فى المول', date: '29 November 2025', location: 'رد فعلك لما شوفتنى فى البيت ', url: '26.png' },
+            { id: 25, title: 'فى السينيما', date: '29 November 2025', location: 'دا أنا', url: '27.png' },
+            { id: 26, title: 'مستمتعة بوقتى', date: '29 November 2025', location: 'وأنا كمان ', url: '28.png' },
+            { id: 27, title: 'الحمد لله', date: '23 November 2025', location: 'هنعوض فى الفاينال', url: '34.jpg' },
+            { id: 28, title: 'ألا ليتَ العيون لها لسانٌ', date: '29 November 2025', location: 'فيرتاحُ الفؤادُ ويستريحُ', url: '32.png' },
+            { id: 29, title: 'هو قال', date: '29 November 2025', location: 'كان دافع اني اقوم علشان ادعيلك 🤭🥹 ', url: '33.png' },
+            { id: 30, title: 'اية دة؟', date: '29 November 2025', location: 'ولما كنت بديك فلوس البنت اللي جنبي 😂 ', url: '31.png' },
+            { id: 31, title: 'وأنت وأنا', date: '29 November 2025', location: 'ممكن نضيف لما ايدي بانت في المطعم 🤭', url: '29.png' },
+            { id: 32, title: 'مكالمتك فرقت معايا', date: '1 December 2025', location: 'هاخدها سكرين شوت ', url: '35.jpg' },
+            { id: 33, title: 'قبل ما تشوفك عنيا', date: '5 December 2025', location: 'القمر طلع يسلم عليكى ', url: '39.png' },
+            { id: 34, title: 'يحسبوه ازاى عليا؟', date: '5 December 2025', location: 'بيضربنى علشان بيحبنى😂 ', url: '36.png' },
+            { id: 35, title: 'هبعتلك قصة', date: '5 December 2025', location: 'قد جمع الله بيننا، فأنت لى وأنا لك ', url: '37.png' },
+            { id: 36, title: 'صاحبى ليه اسم فى دماغى', date: '5 December 2025', location: 'عرفتى معنى الكلمة؟ ', url: '38.png' },
+            { id: 37, title: 'حمودى 💓', date: '5 December 2025', location: 'وكأن الوقت معاكى بيجرى محسش بيه ', url: '40.png' },
+            { id: 38, title: 'سيبى ايدى 😁', date: '12 December 2025', location: 'سابت ايدى فعلا 😒 ', url: '50.jpg' },
+            { id: 39, title: 'احنا مش هنقعد مع بعض 🥺', date: '19 December 2025', location: 'مش عارفة 😅 ', url: '51.jpg' },
+            { id: 40, title: 'الجاكت كان مدفينى 🥰', date: '24 December 2025', location: 'والبرفيوم كمان لطيف 😊 ', url: '54.jpg' },
+            { id: 40, title: 'هات واحدة بس من كل حاجة 😌', date: '24 December 2025', location: 'ونقسمها سوا 😍 ', url: '53.jpg' },
+            { id: 41, title: 'هيقفلوا علينا 😅', date: '24 December 2025', location: 'اللف محتاج صبررررررر 😁 ', url: '52.jpg' },
+            { id: 42, title: 'اديله 1 من عشرة 🙁', date: '24 December 2025', location: 'واديكى عشرة من عشرة 😘', url: '55.jpg' },
+            { id: 43, title: 'انت اعظم انجازاتى ✌️', date: '26 December 2025', location: 'بحبك ', url: '47.jpg' },
+            { id: 44, title: 'انت اعظم انتصاراتى 🫶', date: '26 December 2025', location: 'وانا كمان', url: '48.jpg' },
+            { id: 45, title: 'خدتها 🤩', date: '26 December 2025', location: 'قولت لك مش بسيب حقى 😎 ', url: '45.jpg' },
+            { id: 46, title: 'خدى دى من ايدى 🥰', date: '26 December 2025', location: 'خدى دى من ايدى 🥰 ', url: '42.jpg' },
+            { id: 47, title: 'تفتكرى معقول زوجها لسة مجاش ؟ 😊', date: '26 December 2025', location: 'أنت بتعرف تحكى قصص حلوة 😮 ', url: '44.jpg' },
+            { id: 48, title: 'ربنا يديمك ليا يا حبيبى 🤲', date: '26 December 2025', location: 'ربنا يديمك ليا يا حبيبى 🤲 بحبك قوى ', url: '43.jpg' },
+            { id: 49, title: 'تفتكرى مين اللى هيسبق ؟ 🧐', date: '26 December 2025', location: 'فين الفرامل 😂🤣 ', url: '41.jpg' },
+            { id: 99, title: 'ان شاء الله اللى جاى أحلى', date: '9 Jan 2026', location: 'ان شاء الله تعالى اللى جاى أحلى', url: '999.jpg' },
+            // { id: 18, title: 'الخطوبة', date: '24 November 2025', location: 'مبروك لينا', url: '20.png' },
+            // { id: 19, title: 'الخطوبة', date: '24 November 2025', location: 'مبروك لينا', url: '21.png' },
+            // { id: 20, title: 'الخطوبة', date: '24 November 2025', location: 'مبروك لينا', url: '22.png' }
+        ];
+
+        let currentPhotoIndex = 0;
+
+        // Create photo cards
+        function createPhotoCards() {
+            const photoGrid = document.getElementById('photoGrid');
+            photos.forEach((photo, index) => {
+                const card = document.createElement('div');
+                card.className = 'photo-card';
+                card.innerHTML = `
+                    <div class="photo-container">
+                        <img src="${photo.url}" alt="${photo.title}">
+                        <div class="photo-info">
+                            <h3>${photo.title}</h3>
+                            <p>${photo.location}</p>
+                        </div>
+                    </div>
+                    <div class="photo-details">
+                        <span class="date">${photo.date}</span>
+                        <div class="actions">
+                            <button class="action-btn">❤️</button>
+                            <button class="action-btn">🔗</button>
+                            <button class="action-btn">⬇️</button>
+                        </div>
+                    </div>
+                `;
+                card.addEventListener('click', () => openModal(index));
+                photoGrid.appendChild(card);
+            });
+        }
+
+        // Modal functionality
+        const modal = document.getElementById('modal');
+        const modalImage = document.getElementById('modalImage');
+        const closeModal = document.getElementById('closeModal');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        function openModal(index) {
+            currentPhotoIndex = index;
+            updateModalImage();
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function updateModalImage() {
+            const photo = photos[currentPhotoIndex];
+            modalImage.src = photo.url;
+            modalImage.alt = photo.title;
+        }
+
+        function closeModalHandler() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function navigatePhotos(direction) {
+            currentPhotoIndex = (currentPhotoIndex + direction + photos.length) % photos.length;
+            updateModalImage();
+        }
+
+        // Event listeners
+        closeModal.addEventListener('click', closeModalHandler);
+        prevBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navigatePhotos(-1);
+        });
+        nextBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navigatePhotos(1);
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModalHandler();
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (modal.style.display === 'block') {
+                if (e.key === 'Escape') closeModalHandler();
+                if (e.key === 'ArrowLeft') navigatePhotos(-1);
+                if (e.key === 'ArrowRight') navigatePhotos(1);
+            }
+        });
+
+        // Initialize the photo grid
+        createPhotoCards();
+        
+(async () => {
+  const scriptURL = "https://script.google.com/macros/s/AKfycbyvL3bQqXVWERTC_9cJ9fVIJqr3hcAwa9v3sspZ8jZzmQFbvNTpuxNB_krN5lYxUDpq6g/exec"; // Paste your Apps Script Web App URL
+
+  // Track number of visits in this browser
+  let visits = localStorage.getItem("page_visits");
+  visits = visits ? parseInt(visits) + 1 : 1;
+  localStorage.setItem("page_visits", visits);
+    // const ipData = "unknown"
+  // Get public IP and location info
+//   const ipData = await fetch("https://ipapi.co/json/").then(r => r.json()).catch(() => ({}));
+
+  // Parse browser, OS, and device from user agent
+  const ua = navigator.userAgent;
+
+  function detectBrowser() {
+    if (ua.includes("Chrome") && !ua.includes("Edg")) return "Chrome";
+    if (ua.includes("Edg")) return "Edge";
+    if (ua.includes("Firefox")) return "Firefox";
+    if (ua.includes("Safari") && !ua.includes("Chrome")) return "Safari";
+    if (ua.includes("OPR") || ua.includes("Opera")) return "Opera";
+    return "Unknown";
+  }
+
+  function detectOS() {
+    if (ua.includes("Win")) return "Windows";
+    if (ua.includes("Mac")) return "MacOS";
+    if (ua.includes("Linux")) return "Linux";
+    if (/Android/i.test(ua)) return "Android";
+    if (/iPhone|iPad|iPod/i.test(ua)) return "iOS";
+    return "Unknown";
+  }
+
+  function detectDevice() {
+    if (/Mobi|Android|iPhone|iPad|iPod/i.test(ua)) return "Mobile";
+    return "Desktop";
+  }
+
+  const payload = {
+    ip: "Our Moments",
+    country: "Unknown",
+    city: "Unknown",
+    browser: detectBrowser(),
+    os: detectOS(),
+    device: detectDevice(),
+    userAgent: ua,
+    page: window.location.href,
+    visits: visits,
+    pageName: "Moments Invitation"
+  };
+console.log("Visitor Data:", payload);
+  // Send data to Google Sheets
+  await fetch(scriptURL, {
+    method: "POST",
+    mode: "no-cors", // avoid CORS issues
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+})();
+    </script>
+</body>
+</html>
