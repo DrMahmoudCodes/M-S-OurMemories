@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مسابقة الحب - كم تعرف شريكك؟</title>
+    <!-- استيراد خطوط عربية جميلة من جوجل -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@1,700&family=Tajawal:wght@400;500;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #ff4b6e; /* وردي غامق */
+            --secondary: #ff8fa3; /* وردي فاتح */
+            --accent: #fff0f5; /* خلفية وردية جداً */
+            --text: #333333; /* لون النص */
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(255, 75, 110, 0.2);
+            --radius: 20px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif; /* الخط العربي الرئيسي */
+        }
+
+        body {
+            background: linear-gradient(135deg, #fff0f5 0%, #ffc2d1 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--text);
+        }
+
+        .container {
+            background: var(--white);
+            width: 100%;
+            max-width: 600px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+            min-height: 550px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* الهيدر (العنوان) */
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::after {
+            content: '❤';
+            position: absolute;
+            left: -20px; /* عكس الاتجاه للعربية */
+            bottom: -20px;
+            font-size: 10rem;
+            opacity: 0.1;
+            transform: rotate(20deg);
+        }
+
+        h1 {
+            font-family: 'Amiri', serif; /* خط عربي كلاسيكي */
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* منطقة المحتوى */
+        main {
+            padding: 2rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* إدارة الشاشات */
+        .screen {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* النماذج والمدخلات */
+        .input-group {
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            font-size: 1.2rem;
+            text-align: center;
+            transition: border-color 0.3s;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* الأزرار */
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(255, 75, 110, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 75, 110, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        /* تصميم الاختبار */
+        .player-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--primary);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            border: 1px solid #ffcad4;
+        }
+
+        .question-box {
+            background: var(--accent);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+            border: 1px solid #ffeef2;
+        }
+
+        .question-text {
+            font-size: 1.4rem;
+            font-weight: 600;
+            line-height: 1.8;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: white;
+            border: 2px solid #eee;
+            padding: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.2s;
+            text-align: right; /* محاذاة النص لليمين */
+            font-family: 'Tajawal', sans-serif;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .option-btn:hover {
+            border-color: var(--secondary);
+            background: #fffafc;
+        }
+
+        .option-btn.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* لوحة النتائج */
+        .score-board {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+            font-size: 1.2rem;
+            background: #f9f9f9;
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+
+        .p1-score { color: var(--primary); }
+        .p2-score { color: #9d4edd; } /* لون بنفسجي للتمييز */
+
+        /* شاشة النهاية */
+        .winner-trophy {
+            font-size: 4rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-20px);}
+            60% {transform: translateY(-10px);}
+        }
+
+        .final-message {
+            text-align: center;
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            font-style: italic;
+            color: #555;
+            font-family: 'Amiri', serif;
+            line-height: 1.6;
+        }
+
+        .score-breakdown {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            border: 1px solid #eee;
+        }
+
+        .score-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #eee;
+            font-size: 1.1rem;
+        }
+
+        .score-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* رسائل منبثقة صغيرة */
+        .toast-msg {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
+            border-radius: 50px;
+            color: white;
+            font-weight: bold;
+            z-index: 1000;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translate(-50%, 20px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>مسابقة الحب</h1>
+            <p class="subtitle">اختبر مدى معرفتك ببعضكما البعض</p>
+        </header>
+
+        <main>
+            <!-- الشاشة 1: الإعداد -->
+            <div id="screen-setup" class="screen active">
+                <div class="input-group">
+                    <label for="p1-name">اسم اللاعب الأول</label>
+                    <input type="text" id="p1-name" placeholder="مثال: محمود" autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <label for="p2-name">اسم اللاعب الثاني</label>
+                    <input type="text" id="p2-name" placeholder="مثال: سمية" autocomplete="off">
+                </div>
+                <button class="btn" onclick="startGame()">ابدأ المسابقة</button>
+            </div>
+
+            <!-- الشاشة 2: الانتقال بين الأدوار -->
+            <div id="screen-interstitial" class="screen" style="text-align: center;">
+                <div class="loader"></div>
+                <h3>سلم الجهاز إلى: <span id="next-player-name" style="color:var(--primary)">اللاعب</span></h3>
+                <p style="margin-top:10px; color:#666; font-size: 1.1rem;">جهز نفسك للإجابة عن شريك حياتك!</p>
+                <button class="btn" style="margin-top:20px;" onclick="startTurn()">أنا مستعد</button>
+            </div>
+
+            <!-- الشاشة 3: اللعب -->
+            <div id="screen-game" class="screen">
+                <div class="score-board">
+                    <span id="score-p1-display" class="p1-score">اللاعب 1: 0</span>
+                    <span id="score-p2-display" class="p2-score">اللاعب 2: 0</span>
+                </div>
+
+                <div class="player-badge" id="turn-badge">دور اللاعب 1</div>
+
+                <div class="question-box">
+                    <p class="question-text" id="question-text">السطر هنا...</p>
+                </div>
+
+                <div class="options-grid" id="options-container">
+                    <!-- الخيارات تضاف برمجياً -->
+                </div>
+            </div>
+
+            <!-- الشاشة 4: النتائج -->
+            <div id="screen-results" class="screen" style="text-align: center;">
+                <div class="winner-trophy">🏆</div>
+                <h2 id="winner-title" style="font-family: 'Amiri'; font-size: 2rem; margin-bottom: 1rem; color: var(--primary);">تعادل!</h2>
+                <p class="final-message" id="love-message">"الحب ليس عن عدد الأيام أو الشهور أو السنوات التي قضاها البعض معاً. الحب هو مقدار حبك لبعضكما البعض كل يوم."</p>
+                
+                <div class="score-breakdown">
+                    <div class="score-row">
+                        <span id="res-p1-name">اللاعب 1</span>
+                        <strong id="res-p1-score">0 نقطة</strong>
+                    </div>
+                    <div class="score-row">
+                        <span id="res-p2-name">اللاعب 2</span>
+                        <strong id="res-p2-score">0 نقطة</strong>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="location.reload()">العب مرة أخرى</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // --- البيانات والأسئلة ---
+        const questions = [
+            {
+                q: "ما هو أكبر خوف لشريك حياتك؟",
+                options: ["الحشرات / العناكب", "الفشل / خيبة الأمل ", "الوحدة", "الظلام"]
+            },
+            {
+                q: "لو استطاع شريكك السفر الآن إلى أي مكان، أين سيذهب؟",
+                options: ["قطر ", "جزر المالديف ", "ايطاليا", "السعودية"]
+            },
+            {
+                q: "ما هي الطريقة المفضلة لدى شريكك لقضاء عطلة نهاية الأسبوع؟",
+                options: ["مشاهدة كارتون في السرير", "المشي في الطبيعة / رحلات", "الخروج للتسوق والتنزه", "طبخ وجبة لذيذة"]
+            },
+            {
+                q: "أي من الحلويات التالية يفضلها شريكك أكثر؟",
+                options: ["بلح الشام", "تشيز كيك", "آيس كريم", "تورتة"]
+            },
+            {
+                q: "ما هي انطباع شريكك الأول عنك؟",
+                options: ["ظن أنني لطيف/جذاب", "ظن أنني مزعج", "ظن أنني خجول", "لا يتذكر!"]
+            },
+            {
+                q: "ما هو الشيء الوحيد الذي لا يستطيع شريكك العيش بدونه؟",
+                options: ["هاتفه", "الكارتون", "البيتزا", "أنا!"]
+            },
+            {
+                q: "ما هو نوع الأفلام الذي يشاهده شريكك غالباً؟",
+                options: ["رومانسي/كوميدي", ["رعب /غموض"], "أكشن / خيال علمي", "وثائقي"]
+            },
+            {
+                q: "لو كان شريكك حيواناً، أي حيوان سيكون؟",
+                options: ["كلب (وفِي)", ["قطة (لطيف)"], "بومة (حكيم)", ["أسد (قوي)"]]
+            },
+            {
+                q: "ما هي لغة الحب الخاصة بشريكك؟",
+                options: ["كلمات التشجيع", "المساعدة", "قضاء الوقت معًا", "التلامس الجسدي"]
+            },
+            {
+                q: "ما هي أكثر عادة مزعجة لدى شريكك؟",
+                options: ["الشخير", "التأخر دائماً", ["غير مرتب"], "مضغ الطعام بصوت عالٍ"]
+            }
+        ];
+
+        // حالة اللعبة
+        const state = {
+            players: ['', ''],
+            answers: [[], []], // تخزين الإجابات الصحيحة
+            currentRound: 0, // 0=إعداد لاعب 1، 1=إعداد لاعب 2، 2=اختبار لاعب 1، 3=اختبار لاعب 2
+            scores: [0, 0],
+            currentQuestionIndex: 0
+        };
+
+        const romanticQuotes = [
+            "أنماكما زوجان متكاملان!",
+            "الحب الحقيقي هو معرفة التفاصيل الصغيرة.",
+            "روحكما متصلة بوضوح.",
+            "العشق مكان رائع لوجودكما معاً.",
+            "الحب مكون من روح واحدة تسكن في جسدين.",
+            "مهما كانت روحنا مكونة منه، روحي وروحك هما الشيء نفسه."
+        ];
+
+        // --- عناصر DOM ---
+        const screens = {
+            setup: document.getElementById('screen-setup'),
+            interstitial: document.getElementById('screen-interstitial'),
+            game: document.getElementById('screen-game'),
+            results: document.getElementById('screen-results')
+        };
+
+        const inputs = {
+            p1: document.getElementById('p1-name'),
+            p2: document.getElementById('p2-name')
+        };
+
+        const gameUI = {
+            badge: document.getElementById('turn-badge'),
+            question: document.getElementById('question-text'),
+            options: document.getElementById('options-container'),
+            scoreP1: document.getElementById('score-p1-display'),
+            scoreP2: document.getElementById('score-p2-display'),
+            nextPlayerName: document.getElementById('next-player-name')
+        };
+
+        // --- الوظائف ---
+
+        function switchScreen(screenName) {
+            Object.values(screens).forEach(s => s.classList.remove('active'));
+            screens[screenName].classList.add('active');
+        }
+
+        function startGame() {
+            const name1 = inputs.p1.value.trim();
+            const name2 = inputs.p2.value.trim();
+
+            if (!name1 || !name2) {
+                alert("يرجى إدخال اسم اللاعبين!");
+                return;
+            }
+
+            state.players = [name1, name2];
+            
+            // بدء مرحلة الإعداد الأولى (اللاعب 1 يحدد إجاباته)
+            state.currentRound = 0; 
+            prepareInterstitial(name1, "حدد إجاباتك");
+        }
+
+        function prepareInterstitial(playerName, action) {
+            gameUI.nextPlayerName.textContent = playerName;
+            document.querySelector('#screen-interstitial p').textContent = `${action}، ثم سلم الجهاز.`;
+            switchScreen('interstitial');
+        }
+
+        function startTurn() {
+            if (state.currentRound === 0) {
+                // اللاعب 1 يحدد الإجابات
+                loadQuestion(0, false, 0); 
+                switchScreen('game');
+            } else if (state.currentRound === 1) {
+                // اللاعب 2 يحدد الإجابات
+                loadQuestion(0, false, 1);
+                switchScreen('game');
+            } else if (state.currentRound === 2) {
+                // اللاعب 1 يجيب عن اللاعب 2
+                loadQuestion(0, true, 2);
+                switchScreen('game');
+            } else if (state.currentRound === 3) {
+                // اللاعب 2 يجيب عن اللاعب 1
+                loadQuestion(0, true, 3);
+                switchScreen('game');
+            }
+        }
+
+        function loadQuestion(index, isQuizRound, roundId) {
+            state.currentQuestionIndex = index;
+            
+            // تحديث سياق واجهة المستخدم
+            let turnText = "";
+            let badgeColor = "";
+            
+            if (roundId === 0) {
+                turnText = `${state.players[0]} يحدد إجاباته`;
+                badgeColor = "color: var(--primary)";
+            } else if (roundId === 1) {
+                turnText = `${state.players[1]} يحدد إجاباته`;
+                badgeColor = "color: #9d4edd";
+            } else if (roundId === 2) {
+                turnText = `${state.players[0]}، ماذا تعرف عن ${state.players[1]}؟`;
+                badgeColor = "color: var(--primary)";
+            } else if (roundId === 3) {
+                turnText = `${state.players[1]}، ماذا تعرف عن ${state.players[0]}؟`;
+                badgeColor = "color: #9d4edd";
+            }
+
+            gameUI.badge.textContent = turnText;
+            gameUI.badge.style = badgeColor;
+            
+            // تعيين السؤال
+            gameUI.question.textContent = questions[index].q;
+            
+            // عرض الخيارات
+            gameUI.options.innerHTML = '';
+            questions[index].options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = opt;
+                btn.onclick = () => handleAnswer(i, isQuizRound, roundId);
+                gameUI.options.appendChild(btn);
+            });
+
+            updateScoreBoard();
+        }
+
+        function handleAnswer(selectedIndex, isQuizRound, roundId) {
+            if (!isQuizRound) {
+                // --- مرحلة الإعداد ---
+                // حفظ الإجابة
+                const playerIndex = roundId; 
+                state.answers[playerIndex][state.currentQuestionIndex] = selectedIndex;
+
+                // السؤال التالي
+                if (state.currentQuestionIndex < questions.length - 1) {
+                    loadQuestion(state.currentQuestionIndex + 1, false, roundId);
+                } else {
+                    // نهاية جولة الإعداد
+                    if (roundId === 0) {
+                        state.currentRound = 1;
+                        prepareInterstitial(state.players[1], "حدد إجاباتك");
+                    } else {
+                        state.currentRound = 2; // بدء الاختبار
+                        prepareInterstitial(state.players[0], "أجب عن شريكك");
+                    }
+                }
+            } else {
+                // --- مرحلة الاختبار ---
+                // التحقق من الإجابة
+                const targetPlayerAnswersIndex = (roundId === 2) ? 1 : 0;
+                const correctIndex = state.answers[targetPlayerAnswersIndex][state.currentQuestionIndex];
+                
+                let scorerIndex = (roundId === 2) ? 0 : 1; // من يحصل على النقطة
+
+                if (selectedIndex === correctIndex) {
+                    state.scores[scorerIndex]++;
+                    showToast("إجابة صحيحة! +1 نقطة ❤️", true);
+                } else {
+                    showToast("أووه، هذه ليست الإجابة الصحيحة.", false);
+                }
+
+                // السؤال التالي
+                if (state.currentQuestionIndex < questions.length - 1) {
+                    loadQuestion(state.currentQuestionIndex + 1, true, roundId);
+                } else {
+                    // نهاية جولة الاختبار
+                    if (roundId === 2) {
+                        state.currentRound = 3;
+                        prepareInterstitial(state.players[1], "أجب عن شريكك");
+                    } else {
+                        endGame();
+                    }
+                }
+            }
+        }
+
+        function showToast(msg, isSuccess) {
+            const toast = document.createElement('div');
+            toast.textContent = msg;
+            toast.className = 'toast-msg';
+            toast.style.background = isSuccess ? '#4caf50' : '#f44336';
+            
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translate(-50%, 20px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 1500);
+        }
+
+        function updateScoreBoard() {
+            gameUI.scoreP1.textContent = `${state.players[0]}: ${state.scores[0]}`;
+            gameUI.scoreP2.textContent = `${state.players[1]}: ${state.scores[1]}`;
+        }
+
+        function endGame() {
+            switchScreen('results');
+            
+            document.getElementById('res-p1-name').textContent = state.players[0];
+            document.getElementById('res-p2-name').textContent = state.players[1];
+            document.getElementById('res-p1-score').textContent = `${state.scores[0]} نقطة`;
+            document.getElementById('res-p2-score').textContent = `${state.scores[1]} نقطة`;
+
+            const title = document.getElementById('winner-title');
+            const msg = document.getElementById('love-message');
+
+            if (state.scores[0] > state.scores[1]) {
+                title.textContent = `${state.players[0]} هو الفائز!`;
+                msg.textContent = `${state.players[1]}، يبدو أنك بحاجة لمراجعة معلوماتك عن شريكك! 😉`;
+            } else if (state.scores[1] > state.scores[0]) {
+                title.textContent = `${state.players[1]} هي الفائزة!`;
+                msg.textContent = `${state.players[0]}، يبدو أنك بحاجة لمراجعة معلوماتك عن شريكك! 😉`;
+            } else {
+                title.textContent = "تعادل!";
+                msg.textContent = romanticQuotes[Math.floor(Math.random() * romanticQuotes.length)];
+            }
+        }
+    </script>
+</body>
+</html>
