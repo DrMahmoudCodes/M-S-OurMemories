@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>فاهمني قد إيه؟ 💍</title>
+
+<style>
+body {
+    margin: 0;
+    background: linear-gradient(135deg, #c31432, #240b36);
+    font-family: 'Segoe UI', sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    direction: rtl;
+}
+
+.box {
+    width: 430px;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(14px);
+    border-radius: 22px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.35);
+}
+
+h1 { margin-bottom: 10px; }
+
+input {
+    width: 90%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 20px;
+    border: none;
+    text-align: center;
+    font-size: 16px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin: 7px 0;
+    border: none;
+    border-radius: 25px;
+    background: #fff;
+    color: #c31432;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+    background: #ffd6df;
+}
+
+.stage { font-size: 18px; margin-bottom: 12px; font-weight: bold; }
+.question { font-size: 20px; margin: 18px 0; }
+.message { font-size: 18px; margin-top: 15px; }
+.hidden { display: none; }
+.heart { font-size: 28px; }
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+    <div id="start">
+        <h1>🔥 تحدي المتزوجين 🔥</h1>
+        <input id="name1" placeholder="اسم الزوج">
+        <input id="name2" placeholder="اسم الزوجة">
+        <button onclick="startGame()">ابدأ اللعبة ❤️</button>
+    </div>
+
+    <div id="game" class="hidden">
+        <div class="stage" id="stage"></div>
+        <div class="question" id="question"></div>
+        <div id="answers"></div>
+        <div class="message" id="message"></div>
+    </div>
+
+</div>
+
+<script>
+const questions = [
+    { q: "أكتر حاجة بتكسره نفسيًا؟", options: ["الإهمال", "الكلام الجارح", "التجاهل", "قلة التقدير"] },
+    { q: "إيه اللي بيحسسه مرغوب ومحبوب؟", options: ["الاحتوا/الحضن", "الكلام الحلو", "الاهتمام", "القرب"] },
+    { q: "أكتر حاجة بيغير منها عليك؟", options: ["التجاهل", "الاهتمام بغيره", "الغموض", "البرود"] },
+    { q: "إمتى بيحتاجك من غير ما يطلب؟", options: ["وقت الزعل", "التعب", "الصمت", "الضغط"] },
+    { q: "أسوأ إحساس عنده في العلاقة؟", options: ["إنه مش أولوية", "عدم الفهم", "الشك", "الروتين"] },
+
+    { q: "أكتر تصرف منك بيطمنه؟", options: ["الصدق", "القرب", "الالتزام", "الدعم"] },
+    { q: "إيه تعريفه الحقيقي للحب؟", options: ["أمان", "احتواء", "استمرار", "تفاهم"] },
+    { q: "إيه اللي بيخوفه على علاقتكم؟", options: ["الفتور", "الإهمال", "سوء الفهم", "البعد"] },
+    { q: "إيه أكتر حاجة محتاج يسمعها منك؟", options: ["أنا جنبك", "بحبك", "مهم عندي", "وحشتني"] },
+    { q: "إيه أكتر حاجة بيفتقدها وقت الزعل؟", options: ["الاحتواء", "الاعتذار", "القرب", "الاهتمام"] },
+
+    { q: "أكتر حاجة بتشده ليك؟", options: ["روحك", "اهتمامك", "قربك", "طريقتك"] },
+    { q: "إيه اللي ممكن يخليه يقفل على نفسه؟", options: ["النقد", "الضغط", "التقليل", "التجاهل"] },
+    { q: "إيه الحاجة اللي بيستناها منك من غير ما يقول؟", options: ["الاهتمام", "الكلام", "القرب", "المبادرة"] },
+    { q: "أكتر وقت بيحس فيه بالأمان؟", options: ["وهو معاك", "في البيت", "وقت الكلام", "وقت الهدوء"] },
+    { q: "إيه اللي لو عملته تحسسه إنه مختار صح؟", options: ["الاحتواء", "الوفاء", "التقدير", "الاستمرار"] }
+];
+
+const loveMessages = [
+    "🔥 واضح إن في نار حب مستخبية 🔥",
+    "❤️ التفاهم بينكم مش سهل يتكسر ❤️",
+    "😍 في مشاعر حقيقية مش كلام 😍",
+];
+
+let name1="", name2="";
+let stage=1, q=0, score=0;
+let savedAnswers=[];
+
+const startDiv = document.getElementById("start");
+const gameDiv = document.getElementById("game");
+const stageEl = document.getElementById("stage");
+const questionEl = document.getElementById("question");
+const answersEl = document.getElementById("answers");
+const messageEl = document.getElementById("message");
+
+function startGame(){
+    name1 = document.getElementById("name1").value || "الطرف الأول";
+    name2 = document.getElementById("name2").value || "الطرف التاني";
+    startDiv.classList.add("hidden");
+    gameDiv.classList.remove("hidden");
+    loadQuestion();
+}
+
+function loadQuestion(){
+    messageEl.innerHTML="";
+    stageEl.textContent = stage===1 ? `${name1} 👀 جاوب بصراحة` : `${name2} 🔍 ورينا فاهم قد إيه`;
+    questionEl.textContent = questions[q].q;
+    answersEl.innerHTML="";
+    questions[q].options.forEach((o,i)=>{
+        const b=document.createElement("button");
+        b.textContent=o;
+        b.onclick=()=>select(i);
+        answersEl.appendChild(b);
+    });
+}
+
+function select(choice){
+    if(stage===1){
+        savedAnswers.push(choice);
+    } else {
+        if(choice===savedAnswers[q]){
+            score++;
+            messageEl.innerHTML="❤️ في القلب!";
+        } else {
+            messageEl.innerHTML="😏 محتاج تقرب أكتر";
+        }
+        if((q+1)%5===0){
+            messageEl.innerHTML += `<br><br>${loveMessages[(q/5)|0]}`;
+        }
+    }
+
+    q++;
+    if(q>=questions.length){
+        if(stage===1){
+            stage=2; q=0;
+            alert("🔥 بدّلوا الأدوار… دلوقتي الجد");
+            loadQuestion();
+        } else {
+            showFinal();
+        }
+    } else {
+        setTimeout(loadQuestion,700);
+    }
+}
+
+function showFinal(){
+    stageEl.style.display="none";
+    questionEl.style.display="none";
+    answersEl.style.display="none";
+
+    const percent=Math.round((score/questions.length)*100);
+
+    messageEl.innerHTML=`
+    <div class="heart">❤️ ${score} / ${questions.length}</div><br>
+    نسبة التفاهم: ${percent}%<br><br>
+    💌 ${name2}،<br>
+    ${name1} يمكن ميعرفش كل حاجة،  
+    بس واضح إنه اختارك بقلبه،  
+    ومستعد يفهمك أكتر كل يوم.<br><br>
+    💍 دي مش لعبة… دي عشرة، وحب،  
+    ومشوار طويل يستاهل يتكمل سوا.
+    `;
+}
+</script>
+
+</body>
+</html>
