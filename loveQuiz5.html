@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مسابقة الأزواج - النسخة الثالثة  💍</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@1,700&family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #d63384; /* لون وردي داكن */
+            --primary-dark: #a61e4d;
+            --secondary: #fcc2d7;
+            --accent: #fff0f6;
+            --text: #2d2d2d;
+            --white: #ffffff;
+            --gold: #ffd700;
+            --shadow: 0 10px 25px rgba(214, 51, 132, 0.15);
+            --radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fff0f6 0%, #ffe3e3 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        .container {
+            background: var(--white);
+            width: 100%;
+            max-width: 650px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+            border: 2px solid white;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        header h1 {
+            font-family: 'Amiri', serif;
+            font-size: 2.2rem;
+            margin-bottom: 0.2rem;
+        }
+
+        header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        main {
+            padding: 2rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .screen {
+            display: none;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Setup Styles */
+        .input-group {
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            text-align: center;
+            font-family: 'Cairo', sans-serif;
+            transition: 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s, background 0.3s;
+            box-shadow: 0 4px 10px rgba(214, 51, 132, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            background: var(--primary-dark);
+        }
+
+        /* Game Styles */
+        .progress-container {
+            width: 100%;
+            background-color: #eee;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            height: 8px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .player-badge {
+            background: var(--accent);
+            color: var(--primary-dark);
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 1rem;
+            border: 1px solid var(--secondary);
+        }
+
+        .question-text {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 10px;
+        }
+
+        .option-btn {
+            background: white;
+            border: 2px solid #e9ecef;
+            padding: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.05rem;
+            transition: all 0.2s;
+            text-align: right;
+            font-family: 'Cairo', sans-serif;
+            color: #555;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary);
+            background: #fff0f6;
+        }
+
+        /* Feedback animations */
+        .option-btn.correct {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        
+        .option-btn.wrong {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+
+        /* Floating Hearts */
+        .heart-bg {
+            position: fixed;
+            color: rgba(214, 51, 132, 0.1);
+            font-size: 2rem;
+            z-index: -1;
+            animation: floatUp 10s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(1); opacity: 0; }
+            20% { opacity: 0.5; }
+            80% { opacity: 0.5; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+
+        /* Love Message Popup */
+        .love-msg-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s;
+        }
+
+        .love-msg-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .love-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 90%;
+            width: 400px;
+            transform: scale(0.8);
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 3px solid var(--primary);
+        }
+
+        .love-msg-modal.active .love-card {
+            transform: scale(1);
+        }
+
+        .love-card h3 {
+            font-family: 'Amiri', serif;
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .love-card p {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        /* Results Screen */
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 1.5rem;
+            border: 5px solid var(--primary);
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            font-family: 'Amiri', serif;
+        }
+
+        .final-title {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--primary-dark);
+            font-family: 'Amiri', serif;
+        }
+
+        .final-msg {
+            text-align: center;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            color: #555;
+        }
+
+        /* The Surprise Ring Animation */
+        .ring-surprise {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px dashed #eee;
+            display: none;
+        }
+
+        .ring-emoji {
+            font-size: 5rem;
+            display: block;
+            animation: pulse 1.5s infinite;
+            margin-bottom: 10px;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Decorative Background -->
+    <div id="hearts-container"></div>
+
+    <div class="container">
+        <header>
+            <h1>يا بخت اللي جوزها راضى عليها 💍</h1>
+            <p>مسابقة مخصوصة للمتزوجين وبس</p>
+        </header>
+
+        <main>
+            <!-- 1. SETUP SCREEN -->
+            <div id="screen-setup" class="screen active">
+                <div class="input-group">
+                    <label>اسم الزوج</label>
+                    <input type="text" id="p1-name" placeholder="اكتب اسمك يا عريس">
+                </div>
+                <div class="input-group">
+                    <label>اسم الزوجة</label>
+                    <input type="text" id="p2-name" placeholder="اكتبى اسمك يا عروسة">
+                </div>
+                <button class="btn" onclick="startGame()"> ابدأ اللعب</button>
+            </div>
+
+            <!-- 2. INTERSTITIAL SCREEN -->
+            <div id="screen-interstitial" class="screen" style="text-align: center;">
+                <h2 style="margin-bottom: 1rem; color: var(--primary);">⏸ وقفة</h2>
+                <p id="interstitial-msg" style="font-size: 1.2rem; margin-bottom: 1.5rem;">سلم الموبايل للزوجة</p>
+                <button class="btn" onclick="startTurn()">تم، يلا بينا</button>
+            </div>
+
+            <!-- 3. GAME SCREEN -->
+            <div id="screen-game" class="screen">
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                
+                <div class="player-badge" id="turn-badge">دور الزوج</div>
+                
+                <div class="question-text" id="question-text">السؤال هنا...</div>
+                
+                <div class="options-grid" id="options-container">
+                    <!-- Options injected here -->
+                </div>
+            </div>
+
+            <!-- 4. LOVE MESSAGE MODAL -->
+            <div class="love-msg-modal" id="love-modal">
+                <div class="love-card">
+                    <h3>💌 رسالة حب</h3>
+                    <p id="modal-text">نص الرسالة هنا...</p>
+                    <button class="btn" onclick="closeLoveModal()">شكراً يا غالي</button>
+                </div>
+            </div>
+
+            <!-- 5. RESULTS SCREEN -->
+            <div id="screen-results" class="screen">
+                <div class="score-circle" id="compatibility-score">0%</div>
+                <h2 class="final-title" id="result-title">عنوان النتيجة</h2>
+                <p class="final-msg" id="result-msg">رسالة النتيجة هنا...</p>
+                
+                <div class="score-breakdown" style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <span id="res-p1-name">الزوج</span>
+                        <strong id="res-p1-score">0</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span id="res-p2-name">الزوجة</span>
+                        <strong id="res-p2-score">0</strong>
+                    </div>
+                </div>
+
+                <div class="ring-surprise" id="surprise-box">
+                    <span class="ring-emoji">💍</span>
+                    <h3>يا هلا !</h3>
+                    <p>يا رب تكونوا دايماً لبعض ويرزقكم الذرية الصالحة</p>
+                </div>
+
+                <button class="btn" onclick="location.reload()">لعب تاني</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // --- DATA: 15 QUESTIONS (EGYPTIAN DIALECT) ---
+        const questions = [
+            {
+                q: "أكتر حاجة ممكن تضايقك ؟",
+                options: ["العصبية", "الأكل البيتى مش لذيذ", "قلة النوم", "الصوت العالى والازعاج"]
+            },
+            {
+                q: "لو مفيش فلوس، هتعملوا إيه في الويك إند؟",
+                options: ["نقعد ناكل  سوا", "نزور أهلنا", "نمشى شوية في الشارع", "نتكلم سوا ونستنى الاسبوع الجاي"]
+            },
+            
+            {
+                q: "أكتر حاجة بتخليك متأكد إنك متجوز الشخص الصح؟",
+                options: ["لما يدافع عني قدام الناس", "لما نضحك سوا على حاجة تافهة", "لما يكلمني عن أحلامه", "لما يهدب لي وأهدب له"]
+            },
+            
+            {
+                q: "شكل جوزك/مراتك لما بيقوم من النوم (المنظر الحقيقي):",
+                options: ["ملاك، ناعم ومرتب", "وحش بحر، شعره طاير وعينه مقفلة", "نوم عميق ولا يتحرك", "بيصحى وهو يضحك"]
+            },
+            {
+                q: "أكتر شخصية في العيلة بتتعامل معاها بصعوبة؟",
+                options: ["حماتي/حماي", "أخو/أخت جوزي/مراتي", "ناس كتير ", "أنا محبوب من الكل"]
+            },
+            {
+                q: "ما هو أكبر إنجاز حققتهما سوا في الزواج؟",
+                options: ["السكن والامان", "توفير شوية مال", "تربية أولادنا (لو موجودين)", "تكميل بعضنا"]
+            },
+            {
+                q: "أكتر حاجة بتضايقك في شريك حياتك؟",
+                options: ["الصوت العالي", "النسيان", "العناد", "بحبه زي ما هو"]
+        },
+        {
+            q: "مين أكتر واحد بيصرف فلوس؟",
+            options: ["أنا طبعًا", "هو/هي", "نص نص", "احنا الاتنين"]
+        },
+        {
+            q: "لو زعلتوا من بعض، مين اللي يصالح التانى",
+            options: ["أنا", "هو/هي", "اللي يغلط", "ولا حد وننام"]
+        },
+        {
+            q: "أكتر عادة غريبة عند شريكك؟",
+            options: ["بيكلم نفسه", "بينسى الحاجة في إيده", "بيصحى جعان", "علطول ساكت وسرحان"]
+        },
+        {
+            q: "مين اللي بينام أسرع؟",
+            options: ["أنا", "هو/هي", "حسب التعب", "ولا حد بنفضل على الموبايل"]
+        },
+        {
+            q: "أكتر خناقة بتتكرر؟",
+            options: ["الفلوس", "الأكل", "الخروج", "كل ما سبق"]
+        },
+        {
+            q: "مين اللي بيكسب الخناقات؟",
+            options: ["أنا دايمًا", "هو/هي", "مفيش كسبان", "اللي يعيط"]
+        },
+        {
+            q: "أكتر حاجة بتضحكك في شريكك؟",
+            options: ["شكله وهو معصب", "هزارُه", "تصرفاته العفوية", "كل حاجة فيه"]
+        },
+        {
+            q: "مين اللي بيحب الدلع أكتر؟",
+            options: ["أنا", "هو/هي", "نص نص", "ولا حد"]
+        },
+        {
+            q: "لو اتأخرتوا على خروجة، السبب مين؟",
+            options: ["أنا", "هو/هي", "التحضير", "الكسل"]
+        },
+        {
+            q: "مين بيختار الأكل؟",
+            options: ["أنا", "هو/هي", "اللي جعان أكتر", "بنتخانق وبنطلب دليفري"]
+        },
+        {
+            q: "أكتر وقت بتحبوه سوا؟",
+            options: ["قبل النوم", "الخروجات", "الأكل", "أي وقت"]
+        },
+        {
+            q: "مين بيغار أكتر؟",
+            options: ["أنا", "هو/هي", "الاتنين", "ولا حد"]
+        },
+        {
+            q: "أكتر حاجة رومانسية بيعملها شريكك؟",
+            options: ["كلام حلو", "هدية", "موقف معين", "لسه مستني"]
+        },
+        {
+            q: "مين اللي بيعتذر بصعوبة؟",
+            options: ["أنا", "هو/هي", "الاتنين", "ولا حد"]
+        },
+        {
+            q: "لو فيلم، بتحبوا إيه؟",
+            options: ["رومانسي", "أكشن", "كوميدي", "خيال علمى"]
+        },
+        {
+            q: "مين اللي صبور أكتر؟",
+            options: ["أنا", "هو/هي", "حسب الموقف", "ولا حد"]
+        },
+        {
+            q: "أكتر كلمة بتتقال في البيت؟",
+            options: ["حاضر", "طيب", "استنى", "سيبني"]
+        },
+        {
+            q: "مين اللي بيطبخ أحسن؟",
+            options: ["أنا", "هو/هي", "الاتنين", "الأكل الجاهز"]
+        },
+        {
+            q: "لو مسافرين فجأة؟",
+            options: ["نوافق فورًا", "نحتاج تخطيط", "نكسل", "حسب الفلوس"]
+        },
+        {
+            q: "مين بيصحى مزاجه أحسن؟",
+            options: ["أنا", "هو/هي", "ولا حد", "احنا الاتنين"]
+        },
+        {
+            q: "أكتر حاجة بتحبها في شريكك؟",
+            options: ["قلبه", "شخصيته", "دعمه", "كله"]
+        },
+        {
+            q: "مين بيحب الصور أكتر؟",
+            options: ["أنا", "هو/هي", "الاتنين", "ولا حد"]
+        },
+        {
+            q: "لو خلاف بسيط؟",
+            options: ["نحل فورًا", "نسكت شوية", "نضحك", "نكبرها"]
+        },
+        {
+            q: "مين أكتر واحد بيضحك في البيت؟",
+            options: ["أنا", "هو/هي", "الأولاد", "التلفزيون"]
+        },
+        {
+            q: "مين اللي بيعرف يطبطب؟",
+            options: ["أنا", "هو/هي", "الاتنين", "ولا حد"]
+        },
+        {
+            q: "أكتر حاجة بتخوفك على شريكك؟",
+            options: ["صحته", "زعلُه", "تعبه", "مفيش"]
+        },
+        {
+            q: "مين بيحب المفاجآت؟",
+            options: ["أنا", "هو/هي", "الاتنين", "ولا حد"]
+        },
+        {
+            q: "لو اختلفتم قدام ناس؟",
+            options: ["نسكت", "نغير الموضوع", "نضحك", "نكمل عادي"]
+        },
+        {
+            q: "مين اللي بيحب الهدايا؟",
+            options: ["أنا", "هو/هي", "الاتنين", "مش مهم"]
+        },
+        {
+            q: "أكتر صفة مشتركة بينكم؟",
+            options: ["العند", "الطيبة", "الهزار", "الهدوء"]
+        },
+        {
+            q: "مين اللي بيقلق أكتر؟",
+            options: ["أنا", "هو/هي", "الاتنين", "ولا حد"]
+        },
+        {
+            q: "أكتر حاجة بتقربكم من بعض؟",
+            options: ["الكلام", "الضحك", "الوقت سوا", "المواقف"]
+        },
+        {
+            q: "لو تختاروا كلمة توصف علاقتكم؟",
+            options: ["حب", "شراكة", "صداقة", "كل ده"]
+        },
+        {
+            q: "أكتر حاجة خلتك تحس إنك محظوظ/ة بشريكك؟",
+            options: ["دعمه ليا", "طريقته في الكلام", "وقوفه جنبي", "كل لحظة سوا"]
+        },
+        {
+            q: "إمتى حسيت إنك حبيت شريكك بجد؟",
+            options: ["من أول نظرة", "بعد أول موقف رومانسى", "مع الوقت", "كل يوم أكتر"]
+        },
+        {
+            q: "أكتر تصرف بسيط بس بيفرق معاك؟",
+            options: ["كلمة حلوة", "حضن", "اهتمام", "رسالة مفاجأة"]
+        },
+        {
+            q: "لو توصف شريكك بكلمة؟",
+            options: ["أمان", "حب", "راحة", "كل الدنيا"]
+        },
+        {
+            q: "أكتر وقت بتحسوا فيه بقرب من بعض؟",
+            options: ["قبل النوم", "وقت الكلام", "الخروج سوا", "أي وقت"]
+        },
+        {
+            q: "إيه أكتر حاجة بتحبها في  شريكك؟",
+            options: ["ضحكته", "طريقته وهو بيطمنّي", "ناديني باسمي", "كل حاجة"]
+        },
+        {
+            q: "لو زعلت، أكتر حاجة بترضيك؟",
+            options: ["حضن", "كلام حلو", "اعتذار صادق", "وجوده جنبي"]
+        },
+        {
+            q: "أكتر ذكرى رومانسية بينكم؟",
+            options: ["أول خروجة", "أول اعتراف", "موقف صعب وعدّى", "لحظة هادية سوا"]
+        },
+        {
+            q: "إيه أكتر حاجة بتخليك تطمن مع شريكك؟",
+            options: ["صدقه", "اهتمامه", "ثباته", "قلبه"]
+        },
+        
+        {
+            q: "أكتر حاجة نفسك تعملوها سوا؟",
+            options: ["سفر", "بيت دافي", "نجاح مشترك", "كل الأحلام"]
+        },
+        {
+            q: "إمتى بتحس إنك محبوب/ة بجد؟",
+            options: ["وقت التعب", "وقت الفرح", "في التفاصيل", "في كل وقت"]
+        },
+        {
+            q: "إيه أكتر كلمة من شريكك بتأثر فيك؟",
+            options: ["بحبك", "أنا معاك", "اطمن", "وحشتني"]
+        },
+        {
+            q: "لو الدنيا كلها ضدك، تتمنى مين يكون معاك؟",
+            options: ["شريكي", "نفسي", "حد من أهلي", "اللي يحبني بجد"]
+        },
+        {
+            q: "إيه أكتر حاجة بتحسسك إن الحب لسه بخير؟",
+            options: ["نظرة عين", "لمسة إيد", "اهتمام صادق", "وجوده/ها"]
+        }, {
+        q: "لو شريكك أكلة، هيكون إيه؟",
+        options: ["بيتزا ", "محشي ", "شوكولاتة ", "فول "]
+    },
+    {
+        q: "لو شريكك حيوان، هيكون إيه؟",
+        options: ["قطة كيوت", "حصان وفي", "باندا كسلان", "أسد بس طيب"]
+    },
+    {
+        q: "أغرب عادة بتضحكك عند شريكك؟",
+        options: ["بيكلم نفسه", "بيغني فجأة", "بينسى هو كان بيعمل إيه", "ولا حاجة غريب شوية"]
+    },
+    {
+        q: "لو اتخانقتوا وخيروكوا بين حضن ولا اعتذار؟",
+        options: ["حضن طبعًا", "اعتذار محترم", "الاتنين مع بعض", "ولا ده ولا ده"]
+    },
+    {
+        q: "مين شكله ألطف وهو نايم؟",
+        options: ["أنا", "هو/هي", "الاتنين كيوت", "ولا حد شكله طبيعي"]
+    }
+        ];
+
+        // --- LOVE MESSAGES (After every 5 questions) ---
+        const loveMessages = [
+            "الحب مش بس كلام، الحب هو إنك تفتح الثلاجة وتلاقي الأكل اللي نفسك فيه ❤️",
+            "يا رب يخليلكوا لبعض، ويحفظلكم الود، ويجعل بيتكم مليان ضحكة وأمان 🥰",
+            "الزواج ملهاش أسرار، بس أهم سر إنك تاخدوا بالك من بعض في الأوقات الصعبة 🤝"
+        ];
+
+        // --- STATE ---
+        const state = {
+            players: ['', ''],
+            answers: [[], []], // Stores correct indices
+            scores: [0, 0],
+            currentRound: 0, // 0=P1 Setup, 1=P2 Setup, 2=P1 Quiz, 3=P2 Quiz
+            qIndex: 0
+        };
+
+        // --- DOM ---
+        const screens = document.querySelectorAll('.screen');
+        const ui = {
+            p1Input: document.getElementById('p1-name'),
+            p2Input: document.getElementById('p2-name'),
+            turnBadge: document.getElementById('turn-badge'),
+            qText: document.getElementById('question-text'),
+            options: document.getElementById('options-container'),
+            progressBar: document.getElementById('progress-bar'),
+            interstitialMsg: document.getElementById('interstitial-msg'),
+            loveModal: document.getElementById('love-modal'),
+            modalText: document.getElementById('modal-text'),
+            compScore: document.getElementById('compatibility-score'),
+            resTitle: document.getElementById('result-title'),
+            resMsg: document.getElementById('result-msg'),
+            surpriseBox: document.getElementById('surprise-box'),
+            resP1Name: document.getElementById('res-p1-name'),
+            resP2Name: document.getElementById('res-p2-name'),
+            resP1Score: document.getElementById('res-p1-score'),
+            resP2Score: document.getElementById('res-p2-score')
+        };
+
+        // --- INIT HEARTS ---
+        function createHearts() {
+            const container = document.getElementById('hearts-container');
+            for(let i=0; i<15; i++) {
+                const h = document.createElement('div');
+                h.className = 'heart-bg';
+                h.innerHTML = '❤';
+                h.style.left = Math.random() * 100 + 'vw';
+                h.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                h.style.animationDelay = Math.random() * 5 + 's';
+                container.appendChild(h);
+            }
+        }
+        createHearts();
+
+        function showScreen(id) {
+            screens.forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        // --- GAME FLOW ---
+
+        function startGame() {
+            const n1 = ui.p1Input.value.trim();
+            const n2 = ui.p2Input.value.trim();
+            if(!n1 || !n2) { alert("يا سيدي اكتب الأسماء كاملة عشان نعرف مين مين"); return; }
+            
+            state.players = [n1, n2];
+            state.currentRound = 0;
+            
+            // P1 Setup
+            ui.interstitialMsg.innerHTML = `يا ${n1}، حدد إجاباتك عن نفسك (بس إنت عارف نفسك)`;
+            showScreen('screen-interstitial');
+        }
+
+        function startTurn() {
+            if(state.currentRound === 0) {
+                // P1 Answers about self
+                renderQuestion(false, 0);
+                showScreen('screen-game');
+            } else if(state.currentRound === 1) {
+                // P2 Answers about self
+                renderQuestion(false, 1);
+                showScreen('screen-game');
+            } else if(state.currentRound === 2) {
+                // P1 Answers about P2
+                renderQuestion(true, 2);
+                showScreen('screen-game');
+            } else if(state.currentRound === 3) {
+                // P2 Answers about P1
+                renderQuestion(true, 3);
+                showScreen('screen-game');
+            }
+        }
+
+        function renderQuestion(isQuiz, roundId) {
+            const qData = questions[state.qIndex];
+            let turnText = "";
+            
+            if(!isQuiz) {
+                turnText = (roundId === 0) ? `${state.players[0]} بيجاوب لنفسه` : `${state.players[1]} بيجاوب لنفسه`;
+            } else {
+                turnText = (roundId === 2) ? `${state.players[0]} عايز يجاوب عن ${state.players[1]}` : `${state.players[1]} عايز تجاوب عن ${state.players[0]}`;
+            }
+            
+            ui.turnBadge.textContent = turnText;
+            ui.qText.textContent = qData.q;
+            
+            // Progress Bar
+            const progress = ((state.qIndex) / questions.length) * 100;
+            ui.progressBar.style.width = `${progress}%`;
+
+            ui.options.innerHTML = '';
+            qData.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = opt;
+                btn.onclick = () => handleAnswer(idx, isQuiz, roundId, btn);
+                ui.options.appendChild(btn);
+            });
+        }
+
+        function handleAnswer(selectedIdx, isQuiz, roundId, btnElement) {
+            if(!isQuiz) {
+                // SETUP: Save answer
+                const pIdx = roundId; // 0 for P1 setup, 1 for P2 setup
+                state.answers[pIdx][state.qIndex] = selectedIdx;
+            } else {
+                // QUIZ: Check answer
+                // roundId 2 = P1 guessing P2 (check state.answers[1])
+                // roundId 3 = P2 guessing P1 (check state.answers[0])
+                const targetAnsIdx = (roundId === 2) ? 1 : 0;
+                const correctIdx = state.answers[targetAnsIdx][state.qIndex];
+                const scorer = (roundId === 2) ? 0 : 1;
+
+                if(selectedIdx === correctIdx) {
+                    state.scores[scorer]++;
+                    btnElement.classList.add('correct');
+                    // Add heart visual
+                    const heart = document.createElement('span');
+                    heart.textContent = ' ❤️';
+                    heart.style.fontSize = '1.2rem';
+                    heart.style.marginRight = '5px';
+                    btnElement.prepend(heart);
+                } else {
+                    btnElement.classList.add('wrong');
+                }
+            }
+
+            // Wait a bit then next
+            setTimeout(() => {
+                state.qIndex++;
+                
+                // Check for Love Message (Every 5 questions)
+                // Note: We show message after finishing a batch of 5.
+                if(state.qIndex > 0 && state.qIndex % 5 === 0 && state.qIndex < questions.length) {
+                    const msgIndex = (state.qIndex / 5) - 1;
+                    ui.modalText.textContent = loveMessages[msgIndex];
+                    ui.loveModal.classList.add('active');
+                    return; // Pause here until modal closed
+                }
+
+                advanceRound(roundId);
+            }, 3500);
+        }
+
+        function closeLoveModal() {
+            ui.loveModal.classList.remove('active');
+            advanceRound(state.currentRound);
+        }
+
+        function advanceRound(currentRoundId) {
+            if(state.qIndex >= questions.length) {
+                // End of current phase
+                state.qIndex = 0;
+                if(currentRoundId === 0) {
+                    state.currentRound = 1;
+                    ui.interstitialMsg.textContent = `تمام يا ${state.players[0]}، دلوقتي دور ${state.players[1]} يحدد إجاباته`;
+                    showScreen('screen-interstitial');
+                } else if(currentRoundId === 1) {
+                    state.currentRound = 2;
+                    ui.interstitialMsg.textContent = `يا ${state.players[1]}، سلم الموبايل لـ ${state.players[0]} عشان يجاوب عنك`;
+                    showScreen('screen-interstitial');
+                } else if(currentRoundId === 2) {
+                    state.currentRound = 3;
+                    ui.interstitialMsg.textContent = `يا ${state.players[0]}، سلم الموبايل لـ ${state.players[1]} عشان تجاوب عنك`;
+                    showScreen('screen-interstitial');
+                } else {
+                    endGame();
+                }
+            } else {
+                // Continue in same phase
+                renderQuestion(state.currentRound >= 2, state.currentRound);
+            }
+        }
+
+        function endGame() {
+            ui.progressBar.style.width = '100%';
+            
+            // Calculate Logic
+            const totalPossible = questions.length; // Total points possible per player? No, total is 15 combined max if both guess everything right.
+            // Actually, max points per person is 15.
+            const p1Points = state.scores[0];
+            const p2Points = state.scores[1];
+            const totalPoints = p1Points + p2Points;
+            const maxPossible = 59; // 15 questions
+            const percentage = Math.round((totalPoints / maxPossible) * 100); // Compatibility based on total matches
+
+            ui.compScore.textContent = `${percentage}%`;
+            
+            ui.resP1Name.textContent = state.players[0];
+            ui.resP2Name.textContent = state.players[1];
+            ui.resP1Score.textContent = `${p1Points}/59`;
+            ui.resP2Score.textContent = `${p2Points}/59`;
+
+            let title = "";
+            let msg = "";
+
+            if(percentage >= 70) {
+                title = "توأم روح! 🧬";
+                msg = "يا إلهي! انتما متشابهين أوي. بتفتكروا بنفس الطريقة ومش محتاجين كتير كلام عشان تفهموا بعض.";
+            } else if(percentage >= 50) {
+                title = "فريق محترم 👏";
+                msg = "علاقتكم قوية وفيها محبة، بس لسه في شوية حاجات محتاجين تكتشفوها عن بعض. كلها بخير.";
+            } else if(percentage >= 30) {
+                title = "مفيش مشكلة، محتاجين حوار 🗣️";
+                msg = "الحياة مش مسابقات، انتوا متجوزين عشان تحبوا بعض مهما كانت الإجابات. حاولوا تقعدوا مع بعض كتر.";
+            } else {
+                title = "ظروف قاهرة! 😂";
+                msg = "يا باشا، يبدو إنكم عايشين في كوكبين مختلفين. بس الزواج مصير، فـ استمروا!";
+            }
+
+            ui.resTitle.textContent = title;
+            ui.resMsg.textContent = msg;
+            
+            // Show Surprise
+            ui.surpriseBox.style.display = 'block';
+
+            showScreen('screen-results');
+        }
+
+    </script>
+</body>
+</html>
