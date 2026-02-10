@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="توثيق لحظات محمود وسمية التى لا تنسى">
+    <title>قصة حبنا | ذكريات محمود وسمية التى لا تنسى</title>
+    <!-- Importing Google Fonts for elegant typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #d4af37; /* Gold */
+            --secondary-color: #ffecd1; /* Soft Cream */
+            --bg-color: #fdf6f0; /* Light Rose/Cream */
+            --text-color: #4a4a4a;
+            --accent-color: #e86a6a; /* Soft Red */
+            --card-shadow: 0 10px 20px rgba(0,0,0,0.08);
+            --hover-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            --transition-speed: 0.4s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Section */
+        header {
+            text-align: center;
+            padding: 3rem 1rem;
+            background: linear-gradient(135deg, #fff0f0 0%, #fff 100%);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            position: relative;
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: #777;
+            font-style: italic;
+            animation: fadeInUp 1s ease-out 0.3s backwards;
+        }
+
+        .heart-icon {
+            color: var(--accent-color);
+            animation: heartbeat 1.5s infinite;
+            margin: 0 10px;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            width: 100%;
+        }
+
+        /* Filter Section */
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            animation: fadeIn 1.2s ease-out 0.6s backwards;
+        }
+
+        .filter-btn {
+            background: white;
+            border: 1px solid var(--primary-color);
+            color: var(--text-color);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Lato', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .filter-btn.active {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+            box-shadow: 0 6px 12px rgba(232, 106, 106, 0.3);
+        }
+
+        /* Gallery Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            perspective: 1000px;
+        }
+
+        /* Photo Card */
+        .photo-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all var(--transition-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            transform: translateY(20px);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .photo-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .photo-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: var(--hover-shadow);
+            z-index: 10;
+        }
+
+        .image-wrapper {
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+
+        .photo-card:hover .image-wrapper img {
+            transform: scale(1.1);
+        }
+
+        .card-content {
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Decorative corner elements */
+        .card-content::before {
+            content: '❝';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            color: var(--secondary-color);
+            font-family: 'Playfair Display', serif;
+        }
+
+        .card-date {
+            font-size: 0.8rem;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            direction: ltr;
+        }
+
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-caption {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        /* Modal / Lightbox */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            max-width: 90%;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-img {
+            max-width: 100%;
+            max-height: 70vh;
+            border-radius: 5px;
+            object-fit: contain;
+        }
+
+        .modal-info {
+            text-align: center;
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        .modal-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--text-color);
+        }
+
+        .modal-caption {
+            margin-top: 0.5rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 2rem;
+            color: #333;
+            cursor: pointer;
+            z-index: 1001;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: var(--accent-color);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            margin-top: auto;
+            border-top: 1px solid #eee;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        /* No Results Message */
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+            font-style: italic;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            15% { transform: scale(1.3); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.15); }
+            60% { transform: scale(1); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 { font-size: 2.2rem; }
+            .filter-container { gap: 0.5rem; }
+            .filter-btn { padding: 0.6rem 1rem; font-size: 0.85rem; }
+            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(100%, 1fr)); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1><i class="fas fa-heart heart-icon"></i> قصة حبنا <i class="fas fa-heart heart-icon"></i></h1>
+        <p>توثيق ذكريات مراحل نمو الحب بين محمود وسمية</p>
+    </header>
+
+    <main>
+        <!-- Filter Buttons Section -->
+        <section class="filter-container" id="filter-container">
+            <!-- Buttons will be injected here by JS -->
+        </section>
+
+        <!-- Gallery Grid -->
+        <section class="gallery-grid" id="gallery-grid">
+            <!-- Photos will be injected here by JS -->
+        </section>
+
+        <div class="no-results" id="no-results">
+            <i class="far fa-sad-tear" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>
+            No memories found for this month yet.
+        </div>
+    </main>
+
+    <!-- Modal for viewing full image -->
+    <div class="modal" id="image-modal">
+        <div class="modal-content">
+            <span class="close-btn" id="close-modal">&times;</span>
+            <img src="" alt="Full view" class="modal-img" id="modal-img">
+            <div class="modal-info">
+                <h3 class="modal-title" id="modal-title"></h3>
+                <p class="card-date" id="modal-date"></p>
+                <p class="modal-caption" id="modal-caption"></p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Made with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for you.</p>
+        <p>&copy; Our Love Story</p>
+    </footer>
+
+    <script>
+        // Data Structure as requested by user
+        // Expanded with more dummy data for demonstration purposes
+        const photos = [
+            { id: 1, title: 'لقاؤنا الأول', date: '15 September 2025', caption: 'معنديش اسئلة', url: '1.png' },
+            { id: 2, title: 'لقاؤنا الثانى', date: '19 September 2025', caption: 'انا كاتبة الاسئلة فى الموبايل', url: '22.png' },
+            // { id: 2, title: 'لقاؤنا الثالث', date: '19 September 2025', caption: 'عندنا اسبوع اجازة فى السنة', url: '2.png' },
+            { id: 3, title: 'اشترينا الشبكة', date: '10 October 2025', caption: ' ألف مبروك', url: '18.png' },
+            { id: 4, title: 'الكشف الطبي', date: '28 October 2025', caption: 'عندنا اسبوع اجازة فى السنة', url: '2.png' },
+            { id: 5, title: 'كتبنا كتابنا', date: '21 November 2025', caption: ' ألف مبروك', url: '3.png' },
+            { id: 6, title: 'آيس كريم لطيف', date: '21 November 2025', caption: 'اللون الأزرق لطيف', url: '4.png' },
+            { id: 7, title: 'اعظم انتصاراتى', date: '21 November 2025', caption: 'مبحبش صورى تكون عند حد', url: '5.png' },
+            { id: 8, title: 'أول موعد', date: '22 November 2025', caption: 'بيتزا مع تحليل الشخصية', url: '6.png' },
+            { id: 9, title: 'مشروب لطيف', date: '22 November 2025', caption: 'أفوكادوا بالكاجو', url: '7.png' },
+            { id: 10, title: 'أول مرة لوحدنا', date: '22 November 2025', caption: 'انا لسة معرفكش', url: '8.png' },
+            { id: 11, title: 'بعد الشغل', date: '23 November 2025', caption: 'مفاجأة ... متصلتش لية؟', url: '19.png' },
+            { id: 12, title: 'شاورما لطيفة', date: '23 November 2025', caption: 'من 3 ل 4 محدش يتصل', url: '9.png' },
+            { id: 13, title: 'المشى ليلًا', date: '23 November 2025', caption: 'العيس هى الإبل', url: '10.png' },
+            { id: 14, title: 'فى البيت', date: '23 November 2025', caption: 'الصمت فى حرم الجمال جمال', url: '11.png' },
+            { id: 15, title: 'الجروب', date: '23 November 2025', caption: 'هى: سمية', url: '21.png' },
+            { id: 16, title: 'سيارات', date: '24 November 2025', caption: 'بعرف اسوق', url: '13.png' },
+            { id: 17, title: 'بيت الرعب جدًا', date: '24 November 2025', caption: 'لما ماما تعملك بيت رعب فى البيت', url: '14.png' },
+            { id: 18, title: 'ربنا يستر', date: '24 November 2025', caption: 'لعبة تافهة علفكرة', url: '15.png' },
+            { id: 19, title: 'أكل آسيوى', date: '24 November 2025', caption: 'نجرب الأكل الجديد مع بعض', url: '16.png' },
+            { id: 20, title: 'فى المترو', date: '24 November 2025', caption: 'ونركب المترو كمان ', url: '17.png' },
+            { id: 21, title: 'فى البيت', date: '28 November 2025', caption: 'تسلم إيد اللى عملت الأكل ', url: '23.png' },
+            { id: 22, title: 'لأ طبعًا', date: '28 November 2025', caption: 'ولكن ممكن نتصور علشان وعدتك ', url: '24.png' },
+            { id: 23, title: 'عشرة من عشرة ونجمة', date: '28 November 2025', caption: 'أنت عجبها ديمًا بس أديها فرصة ووقت ... عمرى كلة ', url: '25.png' },
+            { id: 24, title: 'فى المول', date: '29 November 2025', caption: 'رد فعلك لما شوفتنى فى البيت ', url: '26.png' },
+            { id: 25, title: 'فى السينيما', date: '29 November 2025', caption: 'دا أنا', url: '27.png' },
+            { id: 26, title: 'مستمتعة بوقتى', date: '29 November 2025', caption: 'وأنا كمان ', url: '28.png' },
+            { id: 27, title: 'الحمد لله', date: '23 November 2025', caption: 'هنعوض فى الفاينال', url: '34.jpg' },
+            { id: 28, title: 'ألا ليتَ العيون لها لسانٌ', date: '29 November 2025', caption: 'فيرتاحُ الفؤادُ ويستريحُ', url: '32.png' },
+            { id: 29, title: 'هو قال', date: '29 November 2025', caption: 'كان دافع اني اقوم علشان ادعيلك 🤭🥹 ', url: '33.png' },
+            { id: 30, title: 'اية دة؟', date: '29 November 2025', caption: 'ولما كنت بديك فلوس البنت اللي جنبي 😂 ', url: '31.png' },
+            { id: 31, title: 'وأنت وأنا', date: '29 November 2025', caption: 'ممكن نضيف لما ايدي بانت في المطعم 🤭', url: '29.png' },
+            { id: 32, title: 'مكالمتك فرقت معايا', date: '1 December 2025', caption: 'هاخدها سكرين شوت ', url: '35.jpg' },
+            { id: 33, title: 'قبل ما تشوفك عنيا', date: '5 December 2025', caption: 'القمر طلع يسلم عليكى ', url: '39.png' },
+            { id: 34, title: 'يحسبوه ازاى عليا؟', date: '5 December 2025', caption: 'بيضربنى علشان بيحبنى😂 ', url: '36.png' },
+            { id: 35, title: 'هبعتلك قصة', date: '5 December 2025', caption: 'قد جمع الله بيننا، فأنت لى وأنا لك ', url: '37.png' },
+            { id: 36, title: 'صاحبى ليه اسم فى دماغى', date: '5 December 2025', caption: 'عرفتى معنى الكلمة؟ ', url: '38.png' },
+            { id: 37, title: 'حمودى 💓', date: '5 December 2025', caption: 'وكأن الوقت معاكى بيجرى محسش بيه ', url: '40.png' },
+            { id: 38, title: 'سيبى ايدى 😁', date: '12 December 2025', caption: 'سابت ايدى فعلا 😒 ', url: '50.jpg' },
+            { id: 39, title: 'احنا مش هنقعد مع بعض 🥺', date: '19 December 2025', caption: 'مش عارفة 😅 ', url: '51.jpg' },
+            { id: 40, title: 'الجاكت كان مدفينى 🥰', date: '24 December 2025', caption: 'والبرفيوم كمان لطيف 😊 ', url: '54.jpg' },
+            { id: 40, title: 'هات واحدة بس من كل حاجة 😌', date: '24 December 2025', caption: 'ونقسمها سوا 😍 ', url: '53.jpg' },
+            { id: 41, title: 'هيقفلوا علينا 😅', date: '24 December 2025', caption: 'اللف محتاج صبررررررر 😁 ', url: '52.jpg' },
+            { id: 42, title: 'اديله 1 من عشرة 🙁', date: '24 December 2025', caption: 'واديكى عشرة من عشرة 😘', url: '55.jpg' },
+            { id: 43, title: 'انت اعظم انجازاتى ✌️', date: '26 December 2025', caption: 'بحبك ', url: '47.jpg' },
+            { id: 44, title: 'انت اعظم انتصاراتى 🫶', date: '26 December 2025', caption: 'وانا كمان', url: '48.jpg' },
+            { id: 45, title: 'خدتها 🤩', date: '26 December 2025', caption: 'قولت لك مش بسيب حقى 😎 ', url: '45.jpg' },
+            { id: 46, title: 'خدى دى من ايدى 🥰', date: '26 December 2025', caption: 'خدى دى من ايدى 🥰 ', url: '42.jpg' },
+            { id: 47, title: 'تفتكرى معقول زوجها لسة مجاش ؟ 😊', date: '26 December 2025', caption: 'أنت بتعرف تحكى قصص حلوة 😮 ', url: '44.jpg' },
+            { id: 48, title: 'ربنا يديمك ليا يا حبيبى 🤲', date: '26 December 2025', caption: 'ربنا يديمك ليا يا حبيبى 🤲 بحبك قوى ', url: '43.jpg' },
+            { id: 49, title: 'تفتكرى مين اللى هيسبق ؟ 🧐', date: '26 December 2025', caption: 'فين الفرامل 😂🤣 ', url: '41.jpg' },
+            { id: 50, title: 'انت تعمدت تخلينى اكسب 🧐', date: '26 December 2025', caption: 'بعض المعارك فى خسرانها شرف 😊 ', url: '56.jpeg' },
+            { id: 51, title: 'العصير فريش وحلو قوى هيبقى منعش فى الصيف 😁', date: '26 December 2025', caption: 'بس انتى احلى 😘 ', url: '58.jpg' },
+            { id: 52, title: 'مش عاوزة اروح 🥹', date: '26 December 2025', caption: 'وانا كمان 🥺 ', url: '57.jpg' },
+            { id: 53, title: 'سمية انتى فاجئتينى 😳', date: '2 Jan 2026', caption: 'احنا لازم نتجوز 😂 ', url: '61.jpg' },
+            { id: 54, title: 'حاسة بالحب و الأمان 😍', date: '2 Jan 2026', caption: ' اللهم لك الحمد 🤲 وانا مش عاوز حاجة تانى من الدنيا 😍 ', url: '62.jpg' },
+            { id: 55, title: 'مش عاوزة اسيبك 🤗', date: '2 Jan 2026', caption: 'وانا كمان 🤗 ', url: '63.jpg' },
+            { id: 56, title: 'رحلتى من "مش عارفة أقعد إلى أجمل قعدة" 😍', date: '2 Jan 2026', caption: 'انت بس اديها وقت 😊', url: '64.jpg' },
+            { id: 57, title: 'رحلتى من "مبحبش اللف" إلى "يالا بينا نلف" 🤩', date: '3 Jan 2026', caption: 'اديها عمرى 🥰', url: '65.jpg' },
+            { id: 58, title: 'انتى اية حكايتك بالظبط 🧐', date: '3 Jan 2026', caption: 'معقول كل يوم تحلوى عن اليوم اللى قبله ؟ 🥰 ', url: '66.jpg' },
+            { id: 59, title: 'اول سحور لينا مع بعض 😊', date: '3 Jan 2026', caption: 'ربنا يتقبل 🤲 ', url: '67.jpg' },
+            { id: 60, title: 'تحبى تسمعيها منى؟', date: '3 Jan 2026', caption: 'نو ريسك نو فان 😡😤 ', url: '68.jpg' },
+            { id: 61, title: 'ممكن طلب 🥺', date: '3 Jan 2026', caption: 'عقبال ما نصلى القيام سوا عن قريب 🤲 ', url: '69.jpg' },
+            { id: 62, title: 'اية رأيك؟ 🤓', date: '9 Jan 2026', caption: ' اللهم بارك 🤲 زى القمر  ', url: '71.jpg' },
+            { id: 63, title: 'سينابون 😋', date: '9 Jan 2026', caption: 'تحفة ما شاء الله 🥰 ', url: '76.jpg' },
+            { id: 64, title: 'هوت شوكليت 🧋', date: '9 Jan 2026', caption: 'دا المج المفضل 😍 ', url: '77.jpg' },
+            { id: 65, title: 'وكأن الوقت معاكى  🥺', date: '9 Jan 2026', caption: 'بيجرى محس بيه 🥹 ', url: '72.jpg' },
+            { id: 66, title: 'اية رأيك؟ 🤓', date: '10 Jan 2026', caption: 'حلوة عليك 🥰 ', url: '73.jpg' },
+            { id: 67, title: 'اية رأيك 😁', date: '10 Jan 2026', caption: 'كفاية بقا 😂 ', url: '74.jpg' },
+            { id: 68, title: 'ريحة جمبرى؟ 🧐', date: '10 Jan 2026', caption: 'ايوة 😁 ', url: '75.jpg' },
+            { id: 69, title: 'يوم لطيف مع زوجتى الحبيبة 😊', date: '23 Jan 2026', caption: 'ان شاء الله تعالى اللى جاى احلى واحنا مع بعض 🤗 ', url: '79.jpg' },
+            { id: 70, title: 'نشوف فيلم كونان 27 مع بعض 😁', date: '23 Jan 2026', caption: 'زى ما شوفنا الـ 28 كدة 😂 ', url: '80.jpg' },
+            { id: 71, title: 'هذا مؤلم معلمة ثمية 😬', date: '23 Jan 2026', caption: 'آسفة، أنت كويس 🥺 ', url: '81.jpg' },
+            { id: 72, title: 'بستاشيو لذيذ 😋 ', date: '23 Jan 2026', caption: 'بس انتى عارفة اية الألذ منه 😉 ', url: '78.jpg' },
+            { id: 73, title: 'يوم لطيف، ورحلة لطيفة الحمد لله 😌', date: '23 Jan 2026', caption: 'حبيت قوى لغة الحب الجديدة 🤗 ', url: '82.jpg' },
+            { id: 74, title: 'اشترينا السجاد 📜', date: '28 Jan 2026', caption: 'وبدأنا نبنى بيتنا سوا 🏠 ', url: '83.jpeg' },
+            { id: 75, title: 'من اجمل واقيم الهدايا 🎁', date: '30 Jan 2026', caption: 'تسلم ايدك يا حبيبة قلبى 💓', url: '84.jpeg' },
+            { id: 76, title: 'صنعتها بحب 💓', date: '30 Jan 2026', caption: 'اناملها الصغيرة 🥺', url: '85.jpeg' },
+            { id: 77, title: 'ميلك شيك لذيذ 😋', date: '30 Jan 2026', caption: 'زى ما بيقول الكتاب 🤩', url: '86.jpeg' },
+            { id: 78, title: 'اللهم بارك من ألذ ما أكلت فى التورتة 😍', date: '30 Jan 2026', caption: 'تنافسى ايتوال وتكسبيه كمان 😎', url: '87.jpeg' },
+            { id: 79, title: 'كما فى حلمى 😘', date: '30 Jan 2026', caption: 'وانت حلمى يا عمرى ☺️ ', url: '88.jpeg' },
+            { id: 80, title: 'الاطباق دى حلوة للأندومى 😁', date: '31 Jan 2026', caption: 'اندومى؟!!! 😠😡 ', url: '89.jpeg' },
+            { id: 81, title: 'اول مرة أكتشف انى بحب الشوبينج 🛒', date: '1 Feb 2026', caption: 'بنبنى بيتنا سوا 🫶 ', url: '90.jpeg' },
+            { id: 82, title: 'ولكن فقط عندما يكون معك 🛍️', date: '1 Feb 2026', caption: 'وايدينا فى ايدين بعض 🤝 ', url: '91.jpeg' },
+            { id: 83, title: 'ودى كمان علشان الصوصات 🤩', date: '3 Feb 2026', caption: 'حد يخرجنى من هنا 😂 ', url: '92.jpeg' },
+            { id: 84, title: 'حبيبى بردان 🥶', date: '3 Feb 2026', caption: 'تدفى بحضنى يا عمرى 🤗 ', url: '93.jpeg' },
+            { id: 85, title: 'والحلل علشان المحمر والمشمر بقا 😌️', date: '4 Feb 2026', caption: 'انت احلامك كبيرة قوى 😂 ', url: '94.jpeg' },
+            { id: 86, title: 'كل عام وانت حبيبي 💖️', date: '6 Feb 2026', caption: 'كل عام وانت جنبي 💞 ', url: '97.jpeg' },
+            { id: 87, title: 'واو بجد عندك مكتبة مبهرة 😮️', date: '6 Feb 2026', caption: 'اللهم بارك اسأل الله أن ينفعك بها 🤲 ', url: '95.jpeg' },
+            { id: 88, title: 'لحظات رائعة مع رفيقة الدرب 💞', date: '6 Feb 2026', caption: 'الواحد هيعوز اية تانى من الدنيا 💘 ', url: '96.jpeg' },
+            { id: 89, title: 'لحظات رائعة مع رفيق الدرب 💞', date: '6 Feb 2026', caption: 'بحبة وبحس معاه بالأمان💘 ', url: '98.jpeg' },
+            { id: 90, title: 'يوم سريع 😵‍💫', date: '7 Feb 2026', caption: 'الحمد لله لحقنا باقى الحلل 🤲 ', url: '94.jpeg' },
+            { id: 91, title: 'دلوقتى البيت اكتمل لما بقيتى فيه 🥰', date: '9 Feb 2026', caption: 'الحلو في البيت أنه بيتنا 🤭 ', url: '99.jpeg' },
+            // { id: 69, title: 'ريحة جمبرى؟ 🧐', date: '10 Jan 2026', caption: 'ايوة 😁 ', url: '69.jpg' },
+            { id: 99, title: 'ان شاء الله اللى جاى أحلى', date: '9 May 2026', caption: 'ان شاء الله تعالى اللى جاى أحلى', url: '999.jpg' },
+            
+        ];
+        // DOM Elements
+        const filterContainer = document.getElementById('filter-container');
+        const galleryGrid = document.getElementById('gallery-grid');
+        const modal = document.getElementById('image-modal');
+        const closeModalBtn = document.getElementById('close-modal');
+        const noResults = document.getElementById('no-results');
+
+        // Modal Elements
+        const modalImg = document.getElementById('modal-img');
+        const modalTitle = document.getElementById('modal-title');
+        const modalDate = document.getElementById('modal-date');
+        const modalCaption = document.getElementById('modal-caption');
+
+        // Helper: Extract unique months from dates
+        // Format: "Month Year" (e.g., "September 2025")
+        function getUniqueMonths(data) {
+            const months = new Set();
+            data.forEach(photo => {
+                const dateObj = new Date(photo.date);
+                // Using English locale for sorting, but you can change 'en-US' to 'ar-EG' for Arabic
+                const monthYear = dateObj.toLocaleDateString('ar-EG', { month: 'long', year: 'numeric' });
+                months.add(monthYear);
+            });
+            // Convert Set to Array and sort by date
+            return Array.from(months).sort((a, b) => new Date(a) - new Date(b));
+        }
+
+        // Initialize Filters
+        function initFilters() {
+            const months = getUniqueMonths(photos);
+            
+            // Add "All" button
+            const allBtn = document.createElement('button');
+            allBtn.className = 'filter-btn active';
+            allBtn.innerHTML = '<i class="fas fa-th"></i> كل الذكريات';
+            allBtn.dataset.filter = 'all';
+            filterContainer.appendChild(allBtn);
+
+            // Add month buttons
+            months.forEach(month => {
+                const btn = document.createElement('button');
+                btn.className = 'filter-btn';
+                btn.innerHTML = `<i class="far fa-calendar-alt"></i> ${month}`;
+                btn.dataset.filter = month;
+                filterContainer.appendChild(btn);
+            });
+
+            // Add Event Listeners to buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Remove active class from all
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    // Add active to clicked
+                    btn.classList.add('active');
+                    // Filter gallery
+                    filterGallery(btn.dataset.filter);
+                });
+            });
+        }
+
+        // Render Gallery Items
+        function renderGallery(items, append = false) {
+            if (!append) galleryGrid.innerHTML = ''; // Clear if not appending (though we redraw on filter)
+
+            if (items.length === 0) {
+                noResults.style.display = 'block';
+                return;
+            } else {
+                noResults.style.display = 'none';
+            }
+
+            items.forEach((photo, index) => {
+                const card = document.createElement('div');
+                card.className = 'photo-card';
+                // Determine month for this specific photo
+                const photoMonth = new Date(photo.date).toLocaleDateString('ar-EG', { month: 'long', year: 'numeric' });
+                
+                card.innerHTML = `
+                    <div class="image-wrapper">
+                        <img src="${photo.url}" alt="${photo.title}" loading="lazy">
+                    </div>
+                    <div class="card-content">
+                        <div class="card-date">${photo.date}</div>
+                        <h3 class="card-title">${photo.title}</h3>
+                        <p class="card-caption">${photo.caption}</p>
+                    </div>
+                `;
+
+                // Click to open modal
+                card.addEventListener('click', () => openModal(photo));
+
+                galleryGrid.appendChild(card);
+
+                // Staggered Animation
+                setTimeout(() => {
+                    card.classList.add('visible');
+                }, index * 100); // 100ms delay between each card
+            });
+        }
+
+        // Filter Logic
+        function filterGallery(filterCriteria) {
+            // Clear current grid for animation reset
+            galleryGrid.innerHTML = '';
+            
+            let filteredPhotos = photos;
+
+            if (filterCriteria !== 'all') {
+                filteredPhotos = photos.filter(photo => {
+                    const photoMonth = new Date(photo.date).toLocaleDateString('ar-EG', { month: 'long', year: 'numeric' });
+                    return photoMonth === filterCriteria;
+                });
+            }
+
+            renderGallery(filteredPhotos);
+        }
+
+        // Modal Functions
+        function openModal(photo) {
+            modalImg.src = photo.url;
+            modalTitle.innerText = photo.title;
+            modalDate.innerText = photo.date;
+            modalCaption.innerText = photo.caption;
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto'; // Restore scrolling
+        }
+
+        // Event Listeners for Modal
+        closeModalBtn.addEventListener('click', closeModal);
+        
+        // Close when clicking outside content
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', () => {
+            initFilters();
+            renderGallery(photos); // Show all initially
+        });
+(async () => {
+  const scriptURL = "https://script.google.com/macros/s/AKfycbyvL3bQqXVWERTC_9cJ9fVIJqr3hcAwa9v3sspZ8jZzmQFbvNTpuxNB_krN5lYxUDpq6g/exec"; // Paste your Apps Script Web App URL
+
+  // Track number of visits in this browser
+  let visits = localStorage.getItem("page_visits");
+  visits = visits ? parseInt(visits) + 1 : 1;
+  localStorage.setItem("page_visits", visits);
+    // const ipData = "unknown"
+  // Get public IP and location info
+//   const ipData = await fetch("https://ipapi.co/json/").then(r => r.json()).catch(() => ({}));
+
+  // Parse browser, OS, and device from user agent
+  const ua = navigator.userAgent;
+
+  function detectBrowser() {
+    if (ua.includes("Chrome") && !ua.includes("Edg")) return "Chrome";
+    if (ua.includes("Edg")) return "Edge";
+    if (ua.includes("Firefox")) return "Firefox";
+    if (ua.includes("Safari") && !ua.includes("Chrome")) return "Safari";
+    if (ua.includes("OPR") || ua.includes("Opera")) return "Opera";
+    return "Unknown";
+  }
+
+  function detectOS() {
+    if (ua.includes("Win")) return "Windows";
+    if (ua.includes("Mac")) return "MacOS";
+    if (ua.includes("Linux")) return "Linux";
+    if (/Android/i.test(ua)) return "Android";
+    if (/iPhone|iPad|iPod/i.test(ua)) return "iOS";
+    return "Unknown";
+  }
+
+  function detectDevice() {
+    if (/Mobi|Android|iPhone|iPad|iPod/i.test(ua)) return "Mobile";
+    return "Desktop";
+  }
+
+  const payload = {
+    ip: "Our Love Story Moments",
+    country: "Unknown",
+    city: "Unknown",
+    browser: detectBrowser(),
+    os: detectOS(),
+    device: detectDevice(),
+    userAgent: ua,
+    page: window.location.href,
+    visits: visits,
+    pageName: "Love Story"
+  };
+console.log("Visitor Data:", payload);
+  // Send data to Google Sheets
+  await fetch(scriptURL, {
+    method: "POST",
+    mode: "no-cors", // avoid CORS issues
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+})();
+    </script>
+</body>
+</html>
