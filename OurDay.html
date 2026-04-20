@@ -231,11 +231,11 @@
         function startCountdown() {
             const currentYear = new Date().getFullYear();
             // تعيين التاريخ المستهدف (21 أبريل)
-            let targetDate = new Date(`April 21, ${currentYear} 00:00:00`).getTime();
+            let targetDate = new Date(`April 21, ${currentYear} 15:00:00`).getTime();
 
             const now = new Date().getTime();
             if (targetDate < now) {
-                targetDate = new Date(`April 21, ${currentYear + 1} 00:00:00`).getTime();
+                targetDate = new Date(`April 21, ${currentYear + 1} 15:00:00`).getTime();
             }
 
             const dEl = document.getElementById('days');
